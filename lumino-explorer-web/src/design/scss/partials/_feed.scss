@@ -1,0 +1,15 @@
+.feed-list-container {
+  max-height: 400px;
+  overflow-y: auto;
+  bottom: 10px;
+
+  .close {
+    opacity: 1;
+  }
+
+  li:last-child {
+    > div {
+      margin-bottom: 0 !important;
+    }
+  }
+}

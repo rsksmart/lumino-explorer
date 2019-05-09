@@ -1,0 +1,163 @@
+main {
+  min-height: 100vh;
+}
+
+.top-bar {
+  height: 75px;
+  background: $blue-darken;
+}
+
+.graphics-container {
+  max-width: 1140px;
+}
+
+.last-movements {
+  background: $gray-darken;
+
+  p {
+    @include font-size(12);
+  }
+
+  span {
+    @include font-size(20);
+    font-weight: 500;
+    color: $emerald;
+  }
+
+  .last-movements__info {
+    span {
+      color: darken($white, 15%);
+    }
+  }
+
+  .last-movements__received {
+    span {
+      color: #14D944;
+    }
+  }
+
+  .last-movements__sent {
+    span {
+      color: #149DD9;
+    }
+  }
+
+  .last-movements__pending {
+    span {
+      color: #D9A114;
+    }
+  }
+
+  .last-movements__failed {
+    span {
+      color: #d93528;
+    }
+  }
+}
+
+.list-sort-graphic {
+  width: 100px;
+
+  li {
+    border-left: 8px solid transparent;
+    @include font-size(12);
+    font-weight: 400;
+    text-align: center;
+
+    &.by-year {
+      border-color: $emerald;
+      color: $emerald;
+    }
+    &.by-month {
+      border-color: #979797;
+      color: #979797;
+    }
+    &.by-week {
+      border-color: #BFBFBF;
+      color: #BFBFBF;
+    }
+  }
+}
+
+.list-last-transaction {
+  font-family: 'Roboto Condensed', sans-serif;
+  @include font-size(28);
+  font-weight: 400;
+}
+
+.filters-bar {
+  background: $blue-darken;
+}
+
+.token-list-container {
+  @include font-size(14);
+
+  li + li {
+    border-left: 1px dashed #638595;
+  }
+}
+
+.lumino-version {
+  color: #727272;
+  @include font-size(12);
+  bottom: 30px;
+}
+
+.op-3 {
+  opacity: .3;
+}
+
+.feed-item {
+  //border-radius: 50px;
+  z-index: 2;
+
+  .feed-item__close {
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    color: $white;
+    background: #4E4E4E;
+    border: none;
+    border-radius: 13px;
+    top: 50%;
+    margin-top: -12px;
+    right: -12px;
+    font-size: 12px;
+  }
+}
+
+.summary-node {
+  z-index: 2;
+  > div {
+    border: 1px solid #4E4E4E;
+  }
+
+
+  li {
+    &:first-child {
+      margin-top: 0 !important;
+    }
+  }
+
+  .summary-node__close {
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    color: $white;
+    background: #4E4E4E;
+    border: none;
+    border-radius: 13px;
+    left: -12px;
+    top: -12px;
+    font-size: 12px;
+    opacity: 1;
+  }
+}
+
+.vis-network,
+canvas {
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}

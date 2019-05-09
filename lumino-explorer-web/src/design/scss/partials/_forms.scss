@@ -1,0 +1,95 @@
+button,
+input,
+select {
+  -webkit-appearance: none;
+  -moz-appearance:    none;
+  appearance:         none;
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+
+// red_theme.scss
+$base-font-size: 12px;
+$title-font-size: 1.3em;
+
+// override scss variable
+$primary-color-dark: #e64a19;
+$primary-color: #ff5722;
+$primary-color-light: #ffccbc;
+$primary-color-text: #ffffff;
+$accent-color: #ff5252;
+$primary-text-color: #212121;
+$secondary-text-color: #757575;
+$divider-color: #e4e4e4;
+$today-bg-color: #fff9c4;
+
+.picker-input {
+  position: relative;
+  &:after {
+    font-family: 'Font Awesome 5 Pro';
+    font-weight: 300;
+    @include font-size(18);
+    content: "\f073";
+    position: absolute;
+    top: 2px;
+    right: 0;
+    color: $blue;
+  }
+}
+
+.picker-input__text {
+  @extend .form-control;
+  color: $white;
+  background: transparent;
+  border-radius: 0;
+  padding: 0.375rem 0.75rem !important;
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+    @extend .form-control;
+    color: $white;
+    background: transparent;
+    border-radius: 0;
+    border-bottom-color: rgba(255,255,255, 1);
+  }
+}
+
+.token-select {
+  .token-select__control {
+    background-color: lighten($gray-darken, 15%);
+    border: none;
+    @extend .p-2;
+    border-radius: 40px;
+  }
+
+  .token-select__control--is-focused {
+    border: none;
+    @extend .shadow-sm;
+  }
+
+  .token-select__placeholder {
+    color: $white;
+  }
+
+  .token-select__indicator.token-select__dropdown-indicator {
+    color: $white;
+  }
+
+  .token-select__indicator-separator {
+    display: none;
+  }
+
+  .token-select__single-value {
+    color: $white;
+  }
+
+  .token-select__menu {
+
+  }
+}
+
