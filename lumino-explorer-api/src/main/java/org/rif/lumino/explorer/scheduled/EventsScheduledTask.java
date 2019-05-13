@@ -40,7 +40,7 @@ public class EventsScheduledTask {
 
   private EventJobMetadata jobMetadata;
 
-  @Scheduled(fixedRate = 15000)
+  @Scheduled(fixedRate = 30000)
   public void run() throws Exception {
 
     // Get schedule metadata

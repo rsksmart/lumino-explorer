@@ -3,7 +3,9 @@ package org.rif.lumino.explorer.managers;
 import org.rif.lumino.explorer.models.EventData;
 import org.rif.lumino.explorer.models.documents.Channel;
 import org.rif.lumino.explorer.models.documents.Feed;
+import org.rif.lumino.explorer.models.documents.Token;
 import org.rif.lumino.explorer.models.dto.ChannelDTO;
+import org.rif.lumino.explorer.models.dto.LuminoNodeDTO;
 import org.rif.lumino.explorer.models.enums.ChannelState;
 import org.rif.lumino.explorer.models.enums.FeedType;
 import org.apache.commons.collections4.CollectionUtils;
@@ -27,6 +29,9 @@ public class ChannelManager {
   @Autowired private CommonService commonService;
   @Autowired private FeedRepository feedRepository;
   @Autowired private ChannelService channelService;
+  @Autowired private LuminoNodeManager luminoNodeManager;
+  @Autowired private TokenManager tokenManager;
+
 
   public List<Channel> getChannelsByState(ChannelState channelState) {
 
@@ -56,15 +61,26 @@ public class ChannelManager {
 
     feedRepository.save(feed);
     channelRepository.save(openedChannel);
+
+    LuminoNodeDTO participant1 = new LuminoNodeDTO();
+    participant1.setNodeAddress(event.getValues().get(1).getValue().toString());
+    luminoNodeManager.register(participant1);
+
+    LuminoNodeDTO participant2 = new LuminoNodeDTO();
+    participant2.setNodeAddress(event.getValues().get(2).getValue().toString());
+    luminoNodeManager.register(participant2);
   }
 
   private Map getDataForChannelFeed(Channel channel, ChannelState channelState) {
     Map<String, String> data = new HashMap<String, String>();
 
+    Token token = tokenManager.getTokenByNetworkAddress(channel.getTokenNetworkAddress());
+
     data.put("channel_identifier", channel.getId());
     data.put("from_address", channel.getParticipantOneAddress());
     data.put("to_address", channel.getParticipantTwoAddress());
     data.put("token_network_address", channel.getTokenNetworkAddress());
+    data.put("token_address", token.getTokenAddress());
     data.put("state", channelState.toString());
 
     return data;

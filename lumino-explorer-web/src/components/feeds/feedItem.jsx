@@ -58,7 +58,7 @@ export default class FeedItem extends Component {
                         To: <span className="text-green">{feedItem.data.to_address}</span>
                     </p>
                     <p className="m-0 w-75 text-truncate">
-                        Token: <span className="text-green">{feedItem.data.token_network_address}</span>
+                        Token: <span className="text-green">{feedItem.data.token_address}</span>
                     </p>
                 </div>;
                 break;

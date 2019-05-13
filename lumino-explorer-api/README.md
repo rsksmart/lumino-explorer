@@ -1,67 +1,108 @@
-# lumino-explorer-api
+# RIF Lumino Explorer API
 
-1. Install latest mongodb server version: https://docs.mongodb.com/manual/installation.            
-2. We recommend install Studio 3T for explore mongodb databases.
-2. Import proyect as maven proyect (File > New > Proyect from existing sources > Then select the .pom file
-3. Run test CreateJobMetadata (This is for create a first document of metadata event job)
-4. Add a new Maven run configuration with the command line: spring-org.rif.lumino.explorer.boot:run
-5. Go to the application.properties and set the lumino.contract.tokenNetworkRegistry property, set the value with your Token Network registry. The token network registry is generated when you deployed smart contracts in lumino.
-6. Go to Studio 3T, open event_job_metadata document and set in zero the following fields: lastSyncBlockChannels, lastSyncBlockChannels
-5. Run it
-7. If you have a SocketTimeOutException, try run postman get rsk logs first 
-8. If you want run project in debug mode, then go to Application.java do rigth click and select Debug, this allows you to debug the application.
-9. Open localhost:8080/poc for test an endpoint
-
-# Code style 
-
-This project uses Googl Java style. You can download it from the plugin center of IntelliJ and bind the format action to Ctrl + S
-
-https://github.com/google/google-java-format. 
+![Lumino Network](Lumino.png?raw=true "RIF Lumino Network")
 
 
+## Pre requisites
 
-# Using web3j to generate smart contract wrappers
-
-In order to interact with contracts, a java wrapper was created, based on the ABI: 
-
-
-```
-marcos@marcos-rsk:~/rsk/lumino-explorer-api/web3j-4.2.0/bin$ ./web3j solidity generate -a=/home/marcos/rsk/lumino-explorer-api/src/main/resources/contracts/TokenNetwork.abi -o=/home/marcos/rsk/lumino-explorer-api/src/main/java/contracts -p="generated"
-
-              _      _____ _     _        
-             | |    |____ (_)   (_)       
-__      _____| |__      / /_     _   ___  
-\ \ /\ / / _ \ '_ \     \ \ |   | | / _ \ 
- \ V  V /  __/ |_) |.___/ / | _ | || (_) |
-  \_/\_/ \___|_.__/ \____/| |(_)|_| \___/ 
-                         _/ |             
-                        |__/              
-
-Generating generated.TokenNetwork ... File written to /home/marcos/rsk/lumino-explorer-api/src/main/java/contracts
-
-```
+1. Access to a synched RSK node. You can do this in a variety of ways:
+   * Run your own node on TestNet or MainNet, see [https://github.com/rsksmart/rskj/wiki/Install-RskJ-and-join-the-RSK-Orchid-Mainnet-Beta]()
+   * Compile and run a RSK node locally, see [https://github.com/rsksmart/rskj/wiki/Compile-and-run-a-RSK-node-locally]()
+2. Mongo Database Server (Version 3.6.x)
+3. Java 8 (Lastest Release)
+4. Maven (Version 3.6.x)
 
 
+## Build RIF Lumino Explorer API from code
 
+1. Get the [RELEASE.NUMBER] code from [GITHUB.URL]
+2. Go to the path you downloaded or cloned Lumino's code (lets call this path `$RIF_LUMINO_EXPLORER_API_PATH`)
+3. Go to the application.properties and set the `lumino.contract.tokenNetworkRegistry` property, set the value with your Token Network registry. The token network registry is generated when you deployed the Lumino Contracts.
+4. Install project dependencies with the follow command:
 
-# Using web3j to generate accounts
+``` mvn install```
 
-To interact with contracts an account was needed, the account was generated using web3j binaries: 
+## Set Up Mongo Database
+
+ 1. Go to `$RIF_LUMINO_EXPLORER_API_PATH/src/main/resources/database/`
+
+ 2. Run the following command when the mongodb server is installed on the local machine:
+
+```user:~/mongo lumino-explorer-api-database-setup.js```
+
+If not, you must execute the following script, specifying a host, port and authentication credentials
+
+```user:~/mongo --host <hostname> -u <username> -p <password> lumino-explorer-api-database-setup.js```
+
+Example:
+
+```user:~/mongo --host 10.10.7.161:27017 -u mongodb -p mongodb lumino-explorer-api-database-setup.js```
+
+ 3. After you run mongo shell command, you will be presented with the following message:
 
 ```
-marcos@marcos-rsk:~/rsk/lumino-explorer-api/web3j-4.2.0/bin$ ./web3j wallet create
+MongoDB shell version $MONGO_SERVER_VERSION
+connecting to: mongodb:$MONGO_HOST:$MONGO_PORT
+MongoDB server version: $MONGO_SERVER_VERSION
+Switched to db lumino_explorer
+Creating a new collection with name event_job_metadata
+WriteResult({ "nInserted" : 1 })
+New  database with name lumino_explorer is created succesfully
+The collections into database are:
+event_job_metadata
+The count of elements into my event_job_metadata is :
+1
+All is done, Now you can run the lumino-explorer-api
+Bye
 
-              _      _____ _     _        
-             | |    |____ (_)   (_)       
-__      _____| |__      / /_     _   ___  
-\ \ /\ / / _ \ '_ \     \ \ |   | | / _ \ 
- \ V  V /  __/ |_) |.___/ / | _ | || (_) |
-  \_/\_/ \___|_.__/ \____/| |(_)|_| \___/ 
-                         _/ |             
-                        |__/              
-
-Please enter a wallet file password: 
-Please re-enter the password: 
-Please enter a destination directory location [/home/marcos/.ethereum/testnet/keystore]: /home/marcos/rsk/lumino-explorer-api/src/main/resources
-Wallet file UTC--2019-04-19T15-07-00.568000000Z--034000b5f2862d114e4b3474f79fc64aad0cb742.json successfully created in: /home/marcos/rsk/lumino-explorer-api/src/main/resources
 ```
+
+
+## Start your RIF Lumino Explorer API
+
+1. Go to `$RIF_LUMINO_EXPLORER_API_PATH`
+2. Run the following command:
+
+```
+ mvn spring-boot:run
+```
+
+ 3. Now you can check if api is running, going to http://localhost:8080. This is a default host and port if you run it locally.
+
+## Additional help
+
+The following sections are created using an Ubuntu 18.04.2 LTS
+
+### Install Maven
+
+(source: [https://linuxize.com/post/how-to-install-apache-maven-on-ubuntu-18-04](https://linuxize.com/post/how-to-install-apache-maven-on-ubuntu-18-04/))
+
+Start by updating the package index:
+
+```$ sudo apt update ```
+
+Next, install Maven by typing the following command:
+
+```$ sudo apt install maven```
+
+Verify the installation by running the `mvn -version` command:
+
+```
+$ mvn -version
+```
+The output should look something like this:
+
+```
+output
+Apache Maven $MAVEN_VERSION
+Maven home: $YOUR_MAVEN_HOME
+Java version: $JAVA_VERSION
+Java home: $JAVA_HOME
+Default locale: $YOUR_LOCALE
+OS name: $YOUR_OS_VERSION
+```
+
+## Useful Links
+
+* [RIF Lumino Network](https://www.rifos.org/rif-lumino-network/)
+* [RIF Lumino Explorer](http://explorer.lumino.rifos.org/)
