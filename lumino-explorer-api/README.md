@@ -11,14 +11,17 @@
 2. Mongo Database Server (Version 3.6.x)
 3. Java 8 (Lastest Release)
 4. Maven (Version 3.6.x)
+5. RSK valid account
 
 
 ## Build RIF Lumino Explorer API from code
 
 1. Get the code by cloning this repo
 2. Go to the path you downloaded or cloned Lumino's code (lets call this path `$RIF_LUMINO_EXPLORER_API_PATH`)
-3. Go to the application.properties and set the `lumino.contract.tokenNetworkRegistry` property, set the value with your Token Network registry. The token network registry is generated when you deployed the Lumino Contracts.
-4. Install project dependencies with the follow command:
+3. Go to the application.properties and set the `lumino.contract.tokenNetworkRegistry` property, set the value with your Token Network registry. 
+4. Set the `lumino.explorer.api.account.file` property to the .json file of your RSK account
+5. Set the `lumino.explorer.api.account.password` property to the password of your account
+6. Install project dependencies with the follow command:
 
 ``` mvn install```
 
