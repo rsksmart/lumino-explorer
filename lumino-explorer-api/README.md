@@ -15,7 +15,7 @@
 
 ## Build RIF Lumino Explorer API from code
 
-1. Get the [RELEASE.NUMBER] code from [GITHUB.URL]
+1. Get the code by cloning this repo
 2. Go to the path you downloaded or cloned Lumino's code (lets call this path `$RIF_LUMINO_EXPLORER_API_PATH`)
 3. Go to the application.properties and set the `lumino.contract.tokenNetworkRegistry` property, set the value with your Token Network registry. The token network registry is generated when you deployed the Lumino Contracts.
 4. Install project dependencies with the follow command:
@@ -104,5 +104,8 @@ OS name: $YOUR_OS_VERSION
 
 ## Useful Links
 
-* [RIF Lumino Network](https://www.rifos.org/rif-lumino-network/)
-* [RIF Lumino Explorer](http://explorer.lumino.rifos.org/)
+* [RIF Lumino Network documentation](https://www.rifos.org/rif-lumino-network/)
+* [RIF Lumino Network](https://github.com/rsksmart/lumin)
+* [RIF Lumino Contracts](https://github.com/rsksmart/lumino-contracts) 
+* [RIF Lumino Web](https://github.com/rsksmart/lumino-web) 
+* [RIF Lumino Explorer](https://github.com/rsksmart/lumino-explorer) 
