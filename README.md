@@ -2,6 +2,10 @@
 
 Lumino Explorer shows information about the nodes of [RIF Lumino Network](https://github.com/rsksmart/lumino)
 
+MainNet public explorer: [http://explorer.lumino.rifos.org/]()
+
+
+
 ## Explorer backend 
 
 The backend is implemented using Java and Mongodb and you can find it at [lumino-explorer-api](https://github.com/rsksmart/lumino-explorer/tree/master/lumino-explorer-api) folder
