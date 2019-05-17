@@ -2,7 +2,7 @@
 
 Lumino Explorer shows information about the nodes of [RIF Lumino Network](https://github.com/rsksmart/lumino)
 
-MainNet public explorer: [http://explorer.lumino.rifos.org/]()
+MainNet public explorer: [http://explorer.lumino.rifos.org/](https://explorer.lumino.rifos.org/)
 
 
 
