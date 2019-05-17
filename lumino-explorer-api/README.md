@@ -110,7 +110,7 @@ OS name: $YOUR_OS_VERSION
 ## Useful Links
 
 * [RIF Lumino Network documentation](https://www.rifos.org/rif-lumino-network/)
-* [http://explorer.lumino.rifos.org/]()
+* [http://explorer.lumino.rifos.org/](https://explorer.lumino.rifos.org/)
 * [RIF Lumino Contracts](https://github.com/rsksmart/lumino-contracts) 
 * [RIF Lumino Web](https://github.com/rsksmart/lumino-web) 
 * [RIF Lumino Network](https://github.com/rsksmart/lumino) 
