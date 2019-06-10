@@ -9,7 +9,7 @@ export const pollChannels = () =>
                     state: 'Opened'
                 }
             }).then(response => {
-                return resolve(dispatch(pollSucceed(response.data, checkChannelsChanged(getState().channelReducer.channels, response.data))));
+                return resolve(dispatch(pollSucceed(response.data.channels, checkChannelsChanged(getState().channelReducer.channels, response.data.channels))));
             })
                 .catch(error => {
                     console.log(JSON.stringify(error));
@@ -20,7 +20,7 @@ export const pollChannels = () =>
 const pollSucceed = (channels, dataChanged) => (
     {
         type: POLL_CHANNELS,
-        data: {channels: channels, channelsChanged: dataChanged}
+        data: {response: channels, channelsChanged: dataChanged}
     }
 );
 

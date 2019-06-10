@@ -1,5 +1,6 @@
 package org.rif.lumino.explorer.services.blockchain;
 
+import org.rif.lumino.explorer.services.blockchain.rskaccount.RskAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -7,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.http.HttpService;
-import org.rif.lumino.explorer.services.blockchain.rskaccount.RskAccountService;
 
 import java.math.BigInteger;
 

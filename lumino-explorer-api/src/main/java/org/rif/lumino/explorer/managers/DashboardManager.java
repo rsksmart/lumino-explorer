@@ -8,11 +8,13 @@ import org.rif.lumino.explorer.models.dto.DashboardSummaryDTO;
 import org.rif.lumino.explorer.models.dto.LuminoNodeDTO;
 import org.rif.lumino.explorer.models.dto.TokenDTO;
 import org.rif.lumino.explorer.models.enums.ChannelState;
+import org.rif.lumino.explorer.services.CommonService;
+import org.rif.lumino.explorer.services.blockchain.HumanStandardTokenService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.rif.lumino.explorer.services.CommonService;
-import org.rif.lumino.explorer.services.blockchain.HumanStandardTokenService;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,6 +25,8 @@ import java.util.stream.Collectors;
 @Component
 @Service
 public class DashboardManager {
+
+    private static final Logger logger = LoggerFactory.getLogger(DashboardManager.class);
 
     @Autowired
     private TokenManager tokenManager;
@@ -41,14 +45,14 @@ public class DashboardManager {
         List<LuminoNode> nodes = null;
         DashboardDTO dashboardDTO = new DashboardDTO();
 
-        try{
+        try {
             tokens = tokenManager.getAll();
             nodes = luminoNodeManager.getAll();
 
             List<TokenDTO> tokenDTOS = commonService.mapTokensDTO(tokens);
 
             String selectedToken = tokenNetworkAddress;
-            if((null == selectedToken) && (null != tokenDTOS) && (tokenDTOS.size() > 0)) {
+            if ((null == selectedToken) && (null != tokenDTOS) && (tokenDTOS.size() > 0)) {
                 selectedToken = tokens.get(0).getTokenNetworkAddress();
             }
 
@@ -62,7 +66,7 @@ public class DashboardManager {
             dashboardDTO.setLuminoNodeDTO(getLuminoNodesDTO(nodes));
 
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            logger.error(ex.getMessage());
         }
 
         return dashboardDTO;
@@ -74,7 +78,7 @@ public class DashboardManager {
     }
 
     private List<LuminoNodeDTO> getLuminoNodesDTO(List<LuminoNode> nodes) {
-        List<LuminoNodeDTO>  luminoNodeDTOS = new ArrayList<>();
+        List<LuminoNodeDTO> luminoNodeDTOS = new ArrayList<>();
         for (LuminoNode luminoNode : nodes) {
             LuminoNodeDTO luminoNodeDTO = new LuminoNodeDTO();
             luminoNodeDTO.setNodeAddress(luminoNode.getNodeAddress());
@@ -87,11 +91,11 @@ public class DashboardManager {
 
     /**
      * Returns the dashboard summary with the following data:
-     *
-     *  Total amount of Lumino Nodes
-     *  Total amount of nodes for the selected token
-     *  Total amount of Lumino channels
-     *  Total amount of channels for the selected token
+     * <p>
+     * Total amount of Lumino Nodes
+     * Total amount of nodes for the selected token
+     * Total amount of Lumino channels
+     * Total amount of channels for the selected token
      *
      * @param selectedToken
      * @param nodes
@@ -116,15 +120,15 @@ public class DashboardManager {
 
     private Integer getNodeCountWithOpenChannels(List<LuminoNode> nodes, List<Channel> openedChannels) {
         Set<String> nodeAddreses = new HashSet<>();
-        for (LuminoNode node: nodes) {
+        for (LuminoNode node : nodes) {
             for (Channel channel : openedChannels) {
-                try{
-                    if(node.getNodeAddress().equalsIgnoreCase(channel.getParticipantOneAddress()) ||
-                            node.getNodeAddress().equalsIgnoreCase(channel.getParticipantTwoAddress())){
+                try {
+                    if (node.getNodeAddress().equalsIgnoreCase(channel.getParticipantOneAddress()) ||
+                            node.getNodeAddress().equalsIgnoreCase(channel.getParticipantTwoAddress())) {
                         nodeAddreses.add(node.getNodeAddress());
                     }
                 } catch (Exception ex) {
-                    System.out.println(ex.getMessage());
+                    logger.error(ex.getMessage());
                 }
             }
         }
