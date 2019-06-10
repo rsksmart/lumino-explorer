@@ -13,7 +13,7 @@ const channelReducer = createReducer(initialState,
         [POLL_CHANNELS](state, action) {
             return {
                 ...state,
-                channels:  action.data.channels,
+                channels:  action.data.response,
                 channelsChanged: false
 
             };
