@@ -1,4 +1,6 @@
-import org.rif.lumino.explorer.boot.Application;
+package org.rif.lumino.explorer.documents;
+
+import org.rif.lumino.explorer.Application;
 import org.rif.lumino.explorer.models.documents.EventJobMetadata;
 import org.junit.Test;
 import org.junit.runner.RunWith;

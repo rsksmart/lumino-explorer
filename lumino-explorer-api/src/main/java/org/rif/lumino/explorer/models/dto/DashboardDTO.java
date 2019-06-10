@@ -3,20 +3,30 @@ package org.rif.lumino.explorer.models.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ApiModel(description = "All Information to build a graph of nodes with channels, left sidebar summary, and list all tokens")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DashboardDTO {
 
+    @ApiModelProperty(notes = "List of all tokens")
     @JsonProperty("tokens")
     private List<TokenDTO> tokensDTO;
+
+    @ApiModelProperty(notes = "List of only open channels")
     @JsonProperty("channels")
     private List<ChannelDTO> channelsDTO;
+
+    @ApiModelProperty(notes = "Information to show a left sidebar summary")
     @JsonProperty("summary")
     private DashboardSummaryDTO dashboardSummaryDTO;
+
+    @ApiModelProperty(notes = "All registered nodes in the topology")
     @JsonProperty("nodes")
     private List<LuminoNodeDTO> luminoNodeDTO;
 

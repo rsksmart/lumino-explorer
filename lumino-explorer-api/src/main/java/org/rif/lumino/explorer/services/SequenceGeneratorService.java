@@ -1,8 +1,6 @@
 package org.rif.lumino.explorer.services;
 
 import org.rif.lumino.explorer.models.documents.DatabaseSequence;
-import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -11,6 +9,8 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+
+import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
 
 @Service
 public class SequenceGeneratorService {

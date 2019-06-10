@@ -1,6 +1,6 @@
-package org.rif.lumino.explorer.boot;
+package org.rif.lumino.explorer;
 
-import org.rif.lumino.explorer.boot.configuration.ApplicationConfig;
+import org.rif.lumino.explorer.boot.configuration.MongoDataBaseConfig;
 import org.rif.lumino.explorer.boot.configuration.WebConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,9 +17,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
       MongoAutoConfiguration.class,
       MongoDataAutoConfiguration.class,
     },
-    scanBasePackages = {"org.rif.lumino.explorer.controllers", "org.rif.lumino.explorer.services", "org.rif.lumino.explorer.managers", "org.rif.lumino.explorer.scheduled", "org.rif.lumino.explorer.repositories", "poc"},
+    scanBasePackages = {"org.rif.lumino.explorer.controllers", "org.rif.lumino.explorer.services", "org.rif.lumino.explorer.managers", "org.rif.lumino.explorer.scheduled", "org.rif.lumino.explorer.repositories"},
     scanBasePackageClasses = {
-      ApplicationConfig.class,
+      MongoDataBaseConfig.class,
       WebConfiguration.class,
     })
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:application.properties")

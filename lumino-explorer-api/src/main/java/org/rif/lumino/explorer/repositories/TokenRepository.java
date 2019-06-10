@@ -5,6 +5,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface TokenRepository extends MongoRepository<Token, String> {
 
-    public Token findByTokenNetworkAddress(String networkAddress);
+    Token findByTokenNetworkAddress(String networkAddress);
 
 }

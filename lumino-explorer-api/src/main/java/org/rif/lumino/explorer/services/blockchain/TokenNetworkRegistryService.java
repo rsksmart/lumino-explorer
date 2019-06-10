@@ -1,8 +1,9 @@
 package org.rif.lumino.explorer.services.blockchain;
 
-import org.rif.lumino.explorer.generated.contracts.TokenNetworkRegistry;
 import org.rif.lumino.explorer.events.LuminoEventRetriever;
+import org.rif.lumino.explorer.generated.contracts.TokenNetworkRegistry;
 import org.rif.lumino.explorer.models.EventData;
+import org.rif.lumino.explorer.services.blockchain.rskaccount.RskAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,6 @@ import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
-import org.rif.lumino.explorer.services.blockchain.rskaccount.RskAccountService;
 
 import javax.annotation.PostConstruct;
 import java.math.BigInteger;

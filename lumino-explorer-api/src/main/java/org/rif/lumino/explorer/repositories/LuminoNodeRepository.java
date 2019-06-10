@@ -5,5 +5,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface LuminoNodeRepository extends MongoRepository<LuminoNode, String> {
 
-    public LuminoNode findByNodeAddress(String nodeAddress);
+    LuminoNode findByNodeAddress(String nodeAddress);
 }

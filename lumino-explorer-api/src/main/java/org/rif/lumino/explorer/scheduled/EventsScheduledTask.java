@@ -7,13 +7,15 @@ import org.rif.lumino.explorer.models.EventData;
 import org.rif.lumino.explorer.models.documents.EventJobMetadata;
 import org.rif.lumino.explorer.models.documents.Token;
 import org.rif.lumino.explorer.models.enums.ChannelState;
+import org.rif.lumino.explorer.services.blockchain.ChannelEventsService;
+import org.rif.lumino.explorer.services.blockchain.TokenNetworkRegistryService;
+import org.rif.lumino.explorer.services.blockchain.Web3Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.rif.lumino.explorer.services.blockchain.ChannelEventsService;
-import org.rif.lumino.explorer.services.blockchain.TokenNetworkRegistryService;
-import org.rif.lumino.explorer.services.blockchain.Web3Service;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -22,118 +24,122 @@ import java.util.Map;
 @Component
 public class EventsScheduledTask {
 
+    private static final Logger logger = LoggerFactory.getLogger(EventsScheduledTask.class);
 
-  @Value("${lumino.contract.tokenNetworkRegistry}")
-  private String tokenNetworkRegistryAddress;
+    @Value("${lumino.contract.tokenNetworkRegistry}")
+    private String tokenNetworkRegistryAddress;
 
-  @Autowired ChannelEventsService channelEventsService;
+    @Autowired
+    ChannelEventsService channelEventsService;
 
-  @Autowired TokenNetworkRegistryService tokenNetworkRegistryService;
+    @Autowired
+    TokenNetworkRegistryService tokenNetworkRegistryService;
 
-  @Autowired EventJobDataManager eventJobDataManager;
+    @Autowired
+    EventJobDataManager eventJobDataManager;
 
-  @Autowired ChannelManager channelManager;
+    @Autowired
+    ChannelManager channelManager;
 
-  @Autowired TokenManager tokenManager;
+    @Autowired
+    TokenManager tokenManager;
 
-  @Autowired Web3Service web3Service;
+    @Autowired
+    Web3Service web3Service;
 
-  private EventJobMetadata jobMetadata;
+    private EventJobMetadata jobMetadata;
 
-  @Scheduled(fixedRate = 30000)
-  public void run() throws Exception {
+    @Scheduled(fixedRate = 30000)
+    public void run() throws Exception {
 
-    // Get schedule metadata
-    jobMetadata = eventJobDataManager.getEventJobData();
-    // Get last blockchain block
-    BigInteger lastChainBlock = web3Service.getBlockNumber();
+        // Get schedule metadata
+        jobMetadata = eventJobDataManager.getEventJobData();
+        // Get last blockchain block
+        BigInteger lastChainBlock = web3Service.getBlockNumber();
 
-    // Execute process
+        // Execute process
 
-    // Get token networks
-    List<EventData> registeredTokens = readTokenCreationEvents();
-    // Update token networks data
-    processTokensPersistence(registeredTokens);
+        // Get token networks
+        List<EventData> registeredTokens = readTokenCreationEvents();
+        // Update token networks data
+        processTokensPersistence(registeredTokens);
 
-    List<Token> tokenNetworks = tokenManager.getAll();
+        List<Token> tokenNetworks = tokenManager.getAll();
 
-    tokenNetworks
-        .parallelStream()
-        .forEach(
-            token -> {
-              try {
-                Map<ChannelState, List<EventData>> channelEvents =
-                    readChannelEvents(token.getTokenNetworkAddress());
-                System.out.println("Token network " + token.getTokenNetworkAddress());
+        tokenNetworks
+                .parallelStream()
+                .forEach(
+                        token -> {
+                            try {
+                                Map<ChannelState, List<EventData>> channelEvents =
+                                        readChannelEvents(token.getTokenNetworkAddress());
+                                logger.info("Token network " + token.getTokenNetworkAddress());
+                                processChannelPersistence(channelEvents);
 
-                processChannelPersistence(channelEvents);
+                            } catch (Exception e) {
+                                logger.error(e.getMessage());
+                            }
+                        });
 
-              } catch (Exception e) {
-                e.printStackTrace();
-              }
-            });
+        updateLastSyncBlockChannels(lastChainBlock.add(new BigInteger("1")));
+        updateLastSyncBlockTokens(lastChainBlock.add(new BigInteger("1")));
+    }
 
-    updateLastSyncBlockChannels(lastChainBlock.add(new BigInteger("1")));
-    updateLastSyncBlockTokens(lastChainBlock.add(new BigInteger("1")));
-  }
+    private Map<ChannelState, List<EventData>> readChannelEvents(String tokenNetworkAddress)
+            throws Exception {
+        Map<ChannelState, List<EventData>> processEvents = processEvents(tokenNetworkAddress);
+        logger.info("ProcessEvents: {}", processEvents);
+        return processEvents;
+    }
 
-  private Map<ChannelState, List<EventData>> readChannelEvents(String tokenNetworkAddress)
-      throws Exception {
-    Map<ChannelState, List<EventData>> processEvents = processEvents(tokenNetworkAddress);
-    System.out.println(processEvents);
-    return processEvents;
-  }
+    private List<EventData> readTokenCreationEvents() throws Exception {
+        return tokenNetworkRegistryService.getTokenRegisteredEvents(
+                jobMetadata.getLastSyncBlockTokens(), null, tokenNetworkRegistryAddress);
+    }
 
-  private List<EventData> readTokenCreationEvents() throws Exception {
-    return tokenNetworkRegistryService.getTokenRegisteredEvents(
-        jobMetadata.getLastSyncBlockTokens(), null, tokenNetworkRegistryAddress);
-  }
+    private void processChannelPersistence(Map<ChannelState, List<EventData>> processEvents) {
+        channelManager.processOpenChannelEvents(processEvents.get(ChannelState.Opened));
+        channelManager.processClosedChannelEvents(processEvents.get(ChannelState.Closed));
+        channelManager.processSettledChannelEvents(processEvents.get(ChannelState.Settled));
+    }
 
-  private void processChannelPersistence(Map<ChannelState, List<EventData>> processEvents) {
-    channelManager.processOpenChannelEvents(processEvents.get(ChannelState.Opened));
-    channelManager.processClosedChannelEvents(processEvents.get(ChannelState.Closed));
-    channelManager.processSettledChannelEvents(processEvents.get(ChannelState.Settled));
-  }
+    private Map<ChannelState, List<EventData>> processEvents(String tokenNetworkAddress)
+            throws Exception {
 
-  private Map<ChannelState, List<EventData>> processEvents(String tokenNetworkAddress)
-      throws Exception {
+        BigInteger from = jobMetadata.getLastSyncBlockChannels();
 
-    BigInteger from = jobMetadata.getLastSyncBlockChannels();
+        logger.info("Getting channel org.rif.lumino.explorer.events from block " + from);
 
-    System.out.println("Getting channel org.rif.lumino.explorer.events from block " + from);
+        List<EventData> openChannelEvents =
+                channelEventsService.getOpenChannelEvents(from, null, tokenNetworkAddress);
+        List<EventData> closeChannelEvents =
+                channelEventsService.getClosedChannelEvents(from, null, tokenNetworkAddress);
+        List<EventData> settledChannelEvents =
+                channelEventsService.getSettledChannelEvents(from, null, tokenNetworkAddress);
 
-    List<EventData> openChannelEvents =
-        channelEventsService.getOpenChannelEvents(from, null, tokenNetworkAddress);
-    List<EventData> closeChannelEvents =
-        channelEventsService.getClosedChannelEvents(from, null, tokenNetworkAddress);
-    List<EventData> settledChannelEvents =
-        channelEventsService.getSettledChannelEvents(from, null, tokenNetworkAddress);
+        return channelManager.mapChannelEventsToCrud(
+                openChannelEvents, closeChannelEvents, settledChannelEvents);
+    }
 
-    return channelManager.mapChannelEventsToCrud(
-        openChannelEvents, closeChannelEvents, settledChannelEvents);
-  }
+    private void processTokensPersistence(List<EventData> registeredTokens) {
+        tokenManager.processRegisterTokenEvents(registeredTokens);
+    }
 
-  private void processTokensPersistence(List<EventData> registeredTokens) {
-    tokenManager.processRegisterTokenEvents(registeredTokens);
-  }
+    private void updateLastSyncBlockChannels(BigInteger lastChainBlock) throws Exception {
+        logger.info("Last chain block "
+                + lastChainBlock
+                + ", updating blocknumber for channel sync to "
+                + lastChainBlock);
 
-  private void updateLastSyncBlockChannels(BigInteger lastChainBlock) throws Exception {
-    System.out.println(
-        "Last chain block "
-            + lastChainBlock
-            + ", updating blocknumber for channel sync to "
-            + lastChainBlock);
+        eventJobDataManager.updateLastSyncBlockChannels(lastChainBlock);
+    }
 
-    eventJobDataManager.updateLastSyncBlockChannels(lastChainBlock);
-  }
+    private void updateLastSyncBlockTokens(BigInteger lastChainBlock) throws Exception {
+        logger.info("Last chain block "
+                + lastChainBlock
+                + ", updating blocknumber for tokens sync to "
+                + lastChainBlock);
 
-  private void updateLastSyncBlockTokens(BigInteger lastChainBlock) throws Exception {
-    System.out.println(
-        "Last chain block "
-            + lastChainBlock
-            + ", updating blocknumber for tokens sync to "
-            + lastChainBlock);
-
-    eventJobDataManager.updateLastSyncBlockTokens(lastChainBlock);
-  }
+        eventJobDataManager.updateLastSyncBlockTokens(lastChainBlock);
+    }
 }

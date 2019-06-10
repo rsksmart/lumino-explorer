@@ -2,10 +2,10 @@ package org.rif.lumino.explorer.managers;
 
 import org.rif.lumino.explorer.constants.LuminoExplorerConstants;
 import org.rif.lumino.explorer.models.documents.EventJobMetadata;
+import org.rif.lumino.explorer.repositories.EventJobDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.rif.lumino.explorer.repositories.EventJobDataRepository;
 
 import java.math.BigInteger;
 import java.util.Comparator;

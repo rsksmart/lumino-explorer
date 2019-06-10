@@ -2,11 +2,11 @@ package org.rif.lumino.explorer.managers;
 
 import org.rif.lumino.explorer.models.documents.Feed;
 import org.rif.lumino.explorer.models.dto.FeedDTO;
+import org.rif.lumino.explorer.repositories.FeedRepository;
+import org.rif.lumino.explorer.services.FeedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.rif.lumino.explorer.repositories.FeedRepository;
-import org.rif.lumino.explorer.services.FeedService;
 
 import java.util.ArrayList;
 import java.util.List;
