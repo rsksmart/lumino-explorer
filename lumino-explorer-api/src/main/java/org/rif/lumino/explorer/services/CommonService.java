@@ -85,7 +85,7 @@ public class CommonService {
         luminoNodes.forEach( luminoNode-> {
             LuminoNodeDTO luminoNodeDTO = LuminoNodeHelper.toDto(luminoNode);
             luminoNodeDTO.setChannels(channelManager.getChannelsByNode(luminoNode.getNodeAddress(),luminoNode.getRnsAddress(), ChannelState.Opened.toString()));
-            luminoNodeDTOS.add(LuminoNodeHelper.toDto(luminoNode));
+            luminoNodeDTOS.add(luminoNodeDTO);
         });
 
         return luminoNodeDTOS;
