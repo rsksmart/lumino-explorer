@@ -1,8 +1,10 @@
 package org.rif.lumino.explorer.managers;
 
+import org.rif.lumino.explorer.exceptions.LuminoNodeNotFoundException;
 import org.rif.lumino.explorer.models.documents.Feed;
 import org.rif.lumino.explorer.models.documents.LuminoNode;
 import org.rif.lumino.explorer.models.dto.LuminoNodeDTO;
+import org.rif.lumino.explorer.models.dto.response.GenericResponseDTO;
 import org.rif.lumino.explorer.models.enums.FeedType;
 import org.rif.lumino.explorer.repositories.FeedRepository;
 import org.rif.lumino.explorer.repositories.LuminoNodeRepository;
@@ -30,7 +32,7 @@ public class LuminoNodeManager {
     LuminoNodeDTO luminoNodeDTOResult = luminoNodeDTOParam;
 
     LuminoNode luminoNode =
-        luminoNodeRepository.findByNodeAddress(luminoNodeDTOParam.getNodeAddress());
+            luminoNodeRepository.findByNodeAddress(luminoNodeDTOParam.getNodeAddress());
 
     if (luminoNode == null) {
       luminoNode = new LuminoNode();
@@ -67,5 +69,40 @@ public class LuminoNodeManager {
     List<LuminoNodeDTO> luminoNodeDTOS = commonService.mapLuminoNodesDTO(getAll());
 
     return luminoNodeDTOS;
+  }
+
+  public void deleteNodeById(String rskAddress) {
+    luminoNodeRepository.deleteById(rskAddress);
+  }
+
+  public GenericResponseDTO updateNode(LuminoNodeDTO luminoNodeDTO, String nodeAddress) {
+    LuminoNode luminoNode = luminoNodeRepository.findByNodeAddress(nodeAddress);
+    GenericResponseDTO<LuminoNodeDTO> responseDTO = new GenericResponseDTO<>();
+    if (luminoNode != null) {
+      if (luminoNodeDTO.getNodeEndpoint() != null) {
+        luminoNode.setNodeEndpoint(luminoNodeDTO.getNodeEndpoint());
+      }
+      if(luminoNodeDTO.getRnsAddress() != null) {
+        luminoNode.setRnsAddress(luminoNodeDTO.getRnsAddress());
+      }
+      if (luminoNodeDTO.getNodeAddress() != null) {
+        luminoNode.setNodeAddress(luminoNodeDTO.getNodeAddress());
+      }
+      if (luminoNodeDTO.getNodeChannelsIds() != null) {
+        luminoNode.setNodeChannelsIds(luminoNodeDTO.getNodeChannelsIds());
+      }
+      if (luminoNodeDTO.getLastAliveSignal() != null) {
+        luminoNode.setLastAliveSignal(luminoNodeDTO.getLastAliveSignal());
+      }
+
+      luminoNodeRepository.save(luminoNode);
+      responseDTO.setData(luminoNodeDTO);
+      responseDTO.setMessage("Node with ID: " + luminoNode.getNodeAddress() + " is successfully updated");
+      responseDTO.setSuccess(true);
+    } else{
+      throw new LuminoNodeNotFoundException(nodeAddress);
+    }
+
+    return responseDTO;
   }
 }
