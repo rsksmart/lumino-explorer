@@ -1,5 +1,6 @@
 package org.rif.lumino.explorer.services;
 
+import org.rif.lumino.explorer.helper.LuminoNodeHelper;
 import org.rif.lumino.explorer.managers.ChannelManager;
 import org.rif.lumino.explorer.managers.TokenManager;
 import org.rif.lumino.explorer.models.documents.Channel;
@@ -82,13 +83,9 @@ public class CommonService {
     public List<LuminoNodeDTO> mapLuminoNodesDTO(List<LuminoNode> luminoNodes){
         List<LuminoNodeDTO> luminoNodeDTOS = new ArrayList<>();
         luminoNodes.forEach( luminoNode-> {
-            LuminoNodeDTO luminoNodeDTO = new LuminoNodeDTO();
-            luminoNodeDTO.setRnsAddress(luminoNode.getRnsAddress());
-            luminoNodeDTO.setNodeAddress(luminoNode.getNodeAddress());
-            luminoNodeDTO.setNodeChannelsIds(luminoNode.getNodeChannelsIds());
-            luminoNodeDTO.setNodeEndpoint(luminoNode.getNodeEndpoint());
+            LuminoNodeDTO luminoNodeDTO = LuminoNodeHelper.toDto(luminoNode);
             luminoNodeDTO.setChannels(channelManager.getChannelsByNode(luminoNode.getNodeAddress(),luminoNode.getRnsAddress(), ChannelState.Opened.toString()));
-            luminoNodeDTOS.add(luminoNodeDTO);
+            luminoNodeDTOS.add(LuminoNodeHelper.toDto(luminoNode));
         });
 
         return luminoNodeDTOS;

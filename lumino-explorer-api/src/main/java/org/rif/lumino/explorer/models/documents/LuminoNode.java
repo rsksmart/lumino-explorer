@@ -12,8 +12,6 @@ public class LuminoNode {
     @Id
     private String nodeAddress;
 
-    private String nodeEndpoint;
-
     private String rnsAddress;
 
     private List<String> nodeChannelsIds;
@@ -23,9 +21,8 @@ public class LuminoNode {
     public LuminoNode() {
     }
 
-    public LuminoNode(String nodeAddress, String nodeEndpoint, String rnsAddress, List<String> nodeChannelsIds, Date lastAliveSignal) {
+    public LuminoNode(String nodeAddress, String rnsAddress, List<String> nodeChannelsIds, Date lastAliveSignal) {
         this.nodeAddress = nodeAddress;
-        this.nodeEndpoint = nodeEndpoint;
         this.rnsAddress = rnsAddress;
         this.nodeChannelsIds = nodeChannelsIds;
         this.lastAliveSignal = lastAliveSignal;
@@ -45,14 +42,6 @@ public class LuminoNode {
 
     public void setNodeAddress(String nodeAddress) {
         this.nodeAddress = nodeAddress;
-    }
-
-    public String getNodeEndpoint() {
-        return nodeEndpoint;
-    }
-
-    public void setNodeEndpoint(String nodeEndpoint) {
-        this.nodeEndpoint = nodeEndpoint;
     }
 
     public String getRnsAddress() {

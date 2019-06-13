@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -22,11 +23,8 @@ public class LuminoNodeDTO {
   @JsonProperty("node_address")
   private String nodeAddress;
 
-  @ApiModelProperty(notes = "The endpoint to know if the node is alive")
-  @JsonProperty("node_endpoint")
-  private String nodeEndpoint;
-
   @ApiModelProperty(notes = "The rns address of node")
+  @NotNull(message = "rns_address can not be null")
   @JsonProperty("rns_address")
   private String rnsAddress;
 
@@ -39,6 +37,7 @@ public class LuminoNodeDTO {
   private List<ChannelDTO> channels;
 
   @ApiModelProperty(notes = "Last alive signal what node send to the exlporer api")
+  @NotNull(message = "lastAliveSignal can not be null")
   @JsonProperty("last_alive_signal")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private Date lastAliveSignal;
@@ -57,14 +56,6 @@ public class LuminoNodeDTO {
 
   public void setNodeAddress(String nodeAddress) {
     this.nodeAddress = nodeAddress;
-  }
-
-  public String getNodeEndpoint() {
-    return nodeEndpoint;
-  }
-
-  public void setNodeEndpoint(String nodeEndpoint) {
-    this.nodeEndpoint = nodeEndpoint;
   }
 
   public String getRnsAddress() {

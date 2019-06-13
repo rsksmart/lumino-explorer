@@ -39,9 +39,21 @@ public class LuminoNodeController {
         return ResponseEntity.ok(luminoNodeManager.getNodes());
     }
 
+    @ApiOperation(value = "Get lumino node by id", response = GenericResponseDTO.class, responseContainer = "Map")
+    @GetMapping(BASE_CONTROLLER_PATH + "/{id}")
+    public ResponseEntity<GenericResponseDTO> getNode(@PathVariable String id) {
+        try {
+            GenericResponseDTO genericResponseDTO = luminoNodeManager.getNodeById(id);
+            return ResponseEntity.ok(genericResponseDTO);
+        } catch (LuminoNodeNotFoundException lnndex) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "LuminoNode Not Found", lnndex);
+        }
+    }
+
     @ApiOperation(value = "Update a lumino node", response = GenericResponseDTO.class, responseContainer = "Map")
     @PutMapping(BASE_CONTROLLER_PATH + "/{id}")
-    public ResponseEntity<GenericResponseDTO> update(@RequestBody LuminoNodeDTO luminoNodeDTO, @PathVariable String id){
+    public ResponseEntity<GenericResponseDTO> update(@Valid @RequestBody LuminoNodeDTO luminoNodeDTO, @PathVariable String id) {
         try {
             GenericResponseDTO genericResponseDTO = luminoNodeManager.updateNode(luminoNodeDTO, id);
             return ResponseEntity.ok(genericResponseDTO);
