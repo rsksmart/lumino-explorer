@@ -21,7 +21,7 @@ import java.util.List;
 public class AliveNodeCheckTask {
 
 
-    private final String CRON_CHECK_NODE_ALIVE = "5 * * * * ?";
+    private final String CRON_CHECK_NODE_ALIVE = "0 30 * * * ?"; // Every 30 minutes
 
     @Autowired
     private LuminoNodeManager luminoNodeManager;
