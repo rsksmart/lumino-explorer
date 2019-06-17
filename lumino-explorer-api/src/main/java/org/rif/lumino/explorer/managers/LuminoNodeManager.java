@@ -9,7 +9,6 @@ import org.rif.lumino.explorer.models.dto.response.GenericResponseDTO;
 import org.rif.lumino.explorer.models.enums.FeedType;
 import org.rif.lumino.explorer.repositories.FeedRepository;
 import org.rif.lumino.explorer.repositories.LuminoNodeRepository;
-import org.rif.lumino.explorer.services.ChannelService;
 import org.rif.lumino.explorer.services.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,8 +25,6 @@ public class LuminoNodeManager {
     @Autowired
     private LuminoNodeRepository luminoNodeRepository;
     @Autowired
-    private ChannelService channelService;
-    @Autowired
     private CommonService commonService;
     @Autowired
     private FeedRepository feedRepository;
@@ -41,13 +38,14 @@ public class LuminoNodeManager {
 
         if (luminoNode == null) {
             luminoNode = new LuminoNode();
+            luminoNode.setLastAliveSignal(luminoNodeDTOParam.getLastAliveSignal());
             luminoNode.setNodeAddress(luminoNodeDTOParam.getNodeAddress());
             luminoNode.setRnsAddress(luminoNodeDTOParam.getRnsAddress());
             luminoNode.setNodeChannelsIds(luminoNodeDTOParam.getNodeChannelsIds());
             luminoNodeRepository.save(luminoNode);
 
         } else {
-            // Update latest rns domain value
+            luminoNode.setLastAliveSignal(luminoNodeDTOParam.getLastAliveSignal());
             luminoNode.setRnsAddress(luminoNodeDTOParam.getRnsAddress());
             luminoNodeRepository.save(luminoNode);
         }

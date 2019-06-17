@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 
 @Component
@@ -67,17 +69,25 @@ public class ChannelManager {
         feedRepository.save(feed);
         channelRepository.save(openedChannel);
 
+        OffsetDateTime utc = OffsetDateTime.now(ZoneOffset.UTC);
+        Date lastAliveSignal = Date.from(utc.toInstant());
+
         LuminoNodeDTO participant1 = new LuminoNodeDTO();
+
+        participant1.setLastAliveSignal(lastAliveSignal);
+
         participant1.setNodeAddress(event.getValues().get(1).getValue().toString());
         luminoNodeManager.register(participant1);
 
         LuminoNodeDTO participant2 = new LuminoNodeDTO();
         participant2.setNodeAddress(event.getValues().get(2).getValue().toString());
+        participant2.setLastAliveSignal(lastAliveSignal);
+
         luminoNodeManager.register(participant2);
     }
 
     private Map getDataForChannelFeed(Channel channel, ChannelState channelState) {
-        Map<String, String> data = new HashMap<String, String>();
+        Map<String, String> data = new HashMap<>();
 
         Token token = tokenManager.getTokenByNetworkAddress(channel.getTokenNetworkAddress());
 

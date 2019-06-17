@@ -2,6 +2,9 @@ package org.rif.lumino.explorer.scheduled;
 
 import org.rif.lumino.explorer.managers.LuminoNodeManager;
 import org.rif.lumino.explorer.models.documents.LuminoNode;
+import org.rif.lumino.explorer.models.dto.ChannelDTO;
+import org.rif.lumino.explorer.models.enums.ChannelState;
+import org.rif.lumino.explorer.services.ChannelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,9 @@ public class AliveNodeCheckTask {
     @Autowired
     private LuminoNodeManager luminoNodeManager;
 
+    @Autowired
+    private ChannelService chanelService;
+
     @Value("${lumino.explorer.api.scheduled.task.alivenodecheck.delete.time.condition.in.minutes}")
     private Integer deleteTimeConditionInMinutes;
 
@@ -36,7 +42,8 @@ public class AliveNodeCheckTask {
 
         List<LuminoNode> luminoNodeList = luminoNodeManager.getAll();
         for (LuminoNode luminoNode : luminoNodeList) {
-            if (luminoNode.getLastAliveSignal() != null) {
+            List<ChannelDTO> channelDTOS = chanelService.getChannelsByLuminoNodeAndState(luminoNode.getNodeAddress(), ChannelState.Opened.toString());
+            if (luminoNode.getLastAliveSignal() != null && channelDTOS.isEmpty()) {
                 LocalDateTime localDateTimeNow = LocalDateTime.now(Clock.systemUTC());
                 Date nodeLocalDateTime = luminoNode.getLastAliveSignal();
                 ZonedDateTime zonedDateTime = nodeLocalDateTime.toInstant().atZone(ZoneId.of("UTC"));

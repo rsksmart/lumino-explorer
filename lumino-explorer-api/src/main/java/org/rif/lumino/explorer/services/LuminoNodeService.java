@@ -16,7 +16,6 @@ import java.util.regex.Pattern;
 public class LuminoNodeService {
 
     @Autowired private MongoTemplate mongoTemplate;
-    @Autowired private CommonService commonService;
 
     public List<LuminoNode> getNodeById(String nodeAddress) {
 
