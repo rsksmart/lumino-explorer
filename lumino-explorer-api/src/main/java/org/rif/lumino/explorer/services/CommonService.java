@@ -41,6 +41,7 @@ public class CommonService {
             channelDTO.setChannelIdentifier(channel.getId());
             channelDTO.setFromAddress(channel.getParticipantOneAddress());
             channelDTO.setToAddress(channel.getParticipantTwoAddress());
+            channelDTO.setTotalDeposit(channel.getTotalDeposit());
 
             List<LuminoNode> luminoNodesFromAddress = luminoNodeService.getNodeById(channel.getParticipantOneAddress());
             List<LuminoNode> luminoNodesToAddress = luminoNodeService.getNodeById(channel.getParticipantTwoAddress());
@@ -57,6 +58,7 @@ public class CommonService {
             channelDTO.setTokenAddress(token.getTokenAddress());
             channelDTO.setTokenName(token.getName());
             channelDTO.setTokenSymbol(token.getSymbol());
+            channelDTO.setTokenDecimals(token.getDecimals());
             channelDTOS.add(channelDTO);
         });
 

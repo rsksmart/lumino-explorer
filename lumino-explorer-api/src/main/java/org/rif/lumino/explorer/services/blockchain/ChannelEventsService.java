@@ -32,9 +32,13 @@ public class ChannelEventsService {
   @Value("${lumino.contracts.settleChannelEvent}")
   private String settleChannelEventName;
 
+  @Value("${lumino.contracts.newDepositChannelEvent}")
+  private String newDespositChannelEventName;
+
   LuminoEventRetriever openChannelService;
   LuminoEventRetriever closeChannelService;
   LuminoEventRetriever settleChannelService;
+  LuminoEventRetriever newDepositChannelService;
 
   @PostConstruct
   public void init() {
@@ -66,6 +70,23 @@ public class ChannelEventsService {
                 new TypeReference<Uint256>(false) {},
                 new TypeReference<Uint256>(false) {}),
             rskBlockchainEndpoint);
+
+    newDepositChannelService =  new LuminoEventRetriever(
+            newDespositChannelEventName,
+            Arrays.asList(
+                    new TypeReference<Uint256>(true) {},
+                    new TypeReference<Address>(true) {},
+                    new TypeReference<Uint256>(false) {}),
+            rskBlockchainEndpoint);
+  }
+
+  public List<EventData> getNewDepositChannelEvents(
+          BigInteger from, BigInteger to, String contractAddress) throws Exception {
+    List<EventData> newDepositChannelEvents = newDepositChannelService.getLogs(from, to, contractAddress);
+    if (!newDepositChannelEvents.isEmpty()) {
+      newDepositChannelEvents.sort(Comparator.comparing(eventData -> eventData.getBlockNumber()));
+    }
+    return newDepositChannelEvents;
   }
 
   public List<EventData> getOpenChannelEvents(

@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
@@ -25,6 +26,9 @@ import java.util.*;
 @Component
 @Service
 public class ChannelManager {
+
+    private static final Integer EVENT_VALUE_KEY_CHANNEL_IDENTIFIER = 0;
+    private static final Integer EVENT_VALUE_KEY_TOTAL_DEPOSIT= 2;
 
     @Autowired
     private ChannelRepository channelRepository;
@@ -38,7 +42,6 @@ public class ChannelManager {
     private LuminoNodeManager luminoNodeManager;
     @Autowired
     private TokenManager tokenManager;
-
 
     public List<Channel> getChannelsByState(ChannelState channelState) {
 
@@ -60,7 +63,7 @@ public class ChannelManager {
                         event.getContractAddress(),
                         event.getValues().get(1).getValue().toString(),
                         event.getValues().get(2).getValue().toString(),
-                        ChannelState.Opened);
+                        ChannelState.Opened, new BigInteger("0"));
 
         Feed feed =
                 commonService.mapNewFeed(
@@ -96,7 +99,12 @@ public class ChannelManager {
         data.put("to_address", channel.getParticipantTwoAddress());
         data.put("token_network_address", channel.getTokenNetworkAddress());
         data.put("token_address", token.getTokenAddress());
+        data.put("token_decimals", token.getDecimals().toString());
         data.put("state", channelState.toString());
+
+        if (channel.getTotalDeposit() != null) {
+            data.put("deposit", channel.getTotalDeposit().toString());
+        }
 
         return data;
     }
@@ -132,6 +140,28 @@ public class ChannelManager {
         }
     }
 
+    public void processNewDepositChannelEvents(List<EventData> events) {
+        for (EventData eventData : events) {
+            processNewDepositChannelEvent(eventData);
+        }
+    }
+
+    public void processNewDepositChannelEvent(EventData event) {
+        BigInteger channelIdentifier = (BigInteger) event.getValues().get(EVENT_VALUE_KEY_CHANNEL_IDENTIFIER).getValue();
+        Optional<Channel> channel = channelRepository.findById(channelIdentifier.toString());
+        Channel channelRetrieved = channel.get();
+        BigInteger totalDeposit = (BigInteger) event.getValues().get(EVENT_VALUE_KEY_TOTAL_DEPOSIT).getValue();
+        channelRetrieved.setTotalDeposit(totalDeposit);
+
+        Feed feed =
+                commonService.mapNewFeed(
+                        FeedType.CHANNEL, getDataForChannelFeed(channelRetrieved, ChannelState.NewDeposit));
+
+        feedRepository.save(feed);
+
+        channelRepository.save(channelRetrieved);
+    }
+
     public void processSettledChannelEvent(EventData event) {
         // Get the previously closed channel and update it. If there is no closed channel throws an
         // error.
@@ -154,12 +184,14 @@ public class ChannelManager {
     public Map<ChannelState, List<EventData>> mapChannelEventsToCrud(
             List<EventData> openChannelEvents,
             List<EventData> closeChannelEvents,
-            List<EventData> settleChannelEvents) {
+            List<EventData> settleChannelEvents,
+            List<EventData> newDepositChannelEvents) {
 
         Map<ChannelState, List<EventData>> eventsMap = new HashMap<>();
         List<EventData> opened = new ArrayList<>(openChannelEvents);
         List<EventData> closed = new ArrayList<>(closeChannelEvents);
         List<EventData> settled = new ArrayList<>(settleChannelEvents);
+        List<EventData> newDeposit = new ArrayList<>(newDepositChannelEvents);
 
         opened.removeAll(closeChannelEvents);
         opened.removeAll(settleChannelEvents);
@@ -178,6 +210,7 @@ public class ChannelManager {
         eventsMap.put(ChannelState.Opened, opened);
         eventsMap.put(ChannelState.Closed, closed);
         eventsMap.put(ChannelState.Settled, settled);
+        eventsMap.put(ChannelState.NewDeposit, newDeposit);
 
         return eventsMap;
     }
