@@ -4,7 +4,8 @@ public enum ChannelState {
   Opened("opened"),
   Closed("closed"),
   WaitingForClose("waiting_for_close"),
-  Settled("settled");
+  Settled("settled"),
+  NewDeposit("new_deposit");
 
   private String channelState;
 

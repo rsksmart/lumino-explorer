@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {CHANNEL, NODE, TOKEN} from "../../lib/search/searchConstants";
+import {fromWei} from "../../lib/amounts/weiConversion";
 
 export default class FeedItem extends Component {
     constructor(props) {
@@ -26,6 +27,9 @@ export default class FeedItem extends Component {
         let feedContent = <div className="border-left ml-3 pl-3"></div>;
         let feedItem = this.props.feedItem;
 
+
+        console.log(feedItem);
+
         switch (feedItem.type.toLowerCase()) {
             case TOKEN:
                 icon = 'fal fa-lg fa-coins';
@@ -49,7 +53,7 @@ export default class FeedItem extends Component {
                 icon = 'fal fa-lg fa-chart-network d-none d-sm-block';
                 feedContent = <div className="border-sm-left ml-sm-3 pl-sm-3 col fs-14">
                     <p className="m-0">
-                        <span><b>{feedItem.type}</b> <b className="text-green">{feedItem.id}</b>  was <b>{feedItem.data.state}</b></span>
+                        <span><b>{feedItem.type}</b> <b className="text-green">{feedItem.id}</b>  {feedItem.data.deposit === "0" ? "was" : "have"} <b>{feedItem.data.state}</b></span>
                     </p>
                     <p className="m-0 w-75 text-truncate">
                        From: <span className="text-green">{feedItem.data.from_address}</span>
@@ -59,6 +63,9 @@ export default class FeedItem extends Component {
                     </p>
                     <p className="m-0 w-75 text-truncate">
                         Token: <span className="text-green">{feedItem.data.token_address}</span>
+                    </p>
+                    <p className="m-0 w-75 text-truncate">
+                        Deposit: <span className="text-green">{fromWei(feedItem.data.deposit, Number(feedItem.data.token_decimals))}</span>
                     </p>
                 </div>;
                 break;
