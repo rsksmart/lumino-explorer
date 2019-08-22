@@ -12,13 +12,13 @@ jobs:
       - run:
           name: Build & Test Explorer Web
           command: |
-                    ls
-                    cd /home/circleci/tmp/lumino-explorer/lumino-explorer-web
+                    cd lumino-explorer-web
                     npm install
                     npm test
       - run:
           name: Build & Test Explorer API
           command: |
-                    cd /home/circleci/tmp/lumino-explorer/lumino-explorer-web
+                    ls
+                    cd lumino-explorer-api
                     mvn install
                     mvn test
