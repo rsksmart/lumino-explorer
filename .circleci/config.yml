@@ -1,0 +1,23 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:7
+    
+    working_directory: ~/tmp
+
+    steps:
+      - checkout
+      - run:
+          name: Build & Test Explorer Web
+          command: |
+                    cd /lumino-explorer/lumino-explorer-web
+                    npm install
+                    npm test
+      - run:
+          name: Build & Test Explorer API
+          command: |
+                    cd /lumino-explorer/lumino-explorer-api
+                    mvn install
+                    mvn test
