@@ -10,15 +10,15 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Build & Test Explorer API
+          command: |
+                    cd lumino-explorer-api
+                    mvn install
+                    mvn test
+      - run:
           name: Build & Test Explorer Web
           command: |
                     cd lumino-explorer-web
                     npm install
                     npm test
-      - run:
-          name: Build & Test Explorer API
-          command: |
-                    ls
-                    cd lumino-explorer-api
-                    mvn install
-                    mvn test
+
