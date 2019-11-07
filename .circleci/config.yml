@@ -13,22 +13,22 @@ jobs:
           name: Build & Test Explorer API
           command: |
                     cd lumino-explorer-api
-                    mvn install
-                    mvn test
+                    sudo mvn install
+                    sudo mvn test
       
-      - run:
-          name: Prepare npm
-          command: |
-                    curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-                    sudo apt update
-                    sudo apt-get install -y nodejs
-                    sudo apt install npm
-                    sudo apt install build-essential
-      
-      - run:
-          name: Build & Test Explorer Web
-          command: |
-                    cd lumino-explorer-web
-                    npm install
-                    npm test
+#      - run:
+#          name: Prepare npm
+#          command: |
+#                    curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+#                    sudo apt update
+#                    sudo apt-get install -y nodejs
+#                    sudo apt install npm
+#                    sudo apt install build-essential
+#      
+#      - run:
+#          name: Build & Test Explorer Web
+#          command: |
+#                    cd lumino-explorer-web
+#                    npm install
+#                    npm test
 
