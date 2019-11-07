@@ -16,10 +16,10 @@ jobs:
       - run:
           name: Build & Test Explorer API
           command: |
-                    sudo -i
+                    apt-get install -y sudo
                     cd lumino-explorer-api
-                    mvn install
-                    mvn verify
+                    sudo mvn install
+                    sudo mvn verify
       
 #      - run:
 #          name: Prepare npm
