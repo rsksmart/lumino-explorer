@@ -6,15 +6,20 @@ jobs:
       - image: circleci/openjdk:8-jdk
     
     working_directory: ~/tmp
-
+    
+    environment:
+      # Customize the JVM maximum heap limit
+      MAVEN_OPTS: -Xmx3200m
+    
     steps:
       - checkout
       - run:
           name: Build & Test Explorer API
           command: |
                     cd lumino-explorer-api
-                    sudo mvn install
-                    sudo mvn test
+                    sudo -i
+                    mvn install
+                    mvn verify
       
 #      - run:
 #          name: Prepare npm
