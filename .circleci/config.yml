@@ -16,8 +16,8 @@ jobs:
       - run:
           name: Build & Test Explorer API
           command: |
-                    cd lumino-explorer-api
                     sudo -i
+                    cd lumino-explorer-api
                     mvn install
                     mvn verify
       
