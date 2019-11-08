@@ -15,8 +15,9 @@ jobs:
       - run:
           name: Install lumino-explorer-api and run tests
           command: |
-                      pwd
+                      ls
                       chown -R $USER:$USER lumino-explorer-api
+                      ls -la
                       cd lumino-explorer-api
                       mvn install
                       mvn verify
