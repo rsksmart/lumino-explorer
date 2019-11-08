@@ -18,27 +18,26 @@ jobs:
                       cd lumino-explorer-api
                       sudo env "PATH=$PATH" mvn install
                       sudo env "PATH=$PATH" mvn verify
-          
+      - run:
+          name: Prepare npm
+          command: |
+                    curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+                    sudo apt update
+                    sudo apt-get install -y nodejs
+                    sudo apt install npm
+                    sudo apt install build-essential
+      
+      - run:
+          name: Build & Test Explorer Web
+          command: |
+                    cd ~/tmp/lumino-explorer-web
+                    npm install
+                    npm build
+                    npm test          
 
 workflows:
     commit:
         jobs:
             - build
 
-      
-#      - run:
-#          name: Prepare npm
-#          command: |
-#                    curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-#                    sudo apt update
-#                    sudo apt-get install -y nodejs
-#                    sudo apt install npm
-#                    sudo apt install build-essential
-#      
-#      - run:
-#          name: Build & Test Explorer Web
-#          command: |
-#                    cd lumino-explorer-web
-#                    npm install
-#                    npm test
 
