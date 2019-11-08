@@ -16,7 +16,7 @@ jobs:
           name: Install lumino-explorer-api and run tests
           command: |
                       cd lumino-explorer-api
-                      sudo mvn install
+                      mvn install
                       sudo mvn verify
           
 
