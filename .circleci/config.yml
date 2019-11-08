@@ -1,9 +1,9 @@
 version: 2.1
 jobs:
-  build:
+  build-api:
     docker:
       # specify the version you desire here
-      - image: circleci/openjdk:latest
+      - image: circleci/openjdk:8-jdk
     working_directory: ~/tmp
 
     environment:
@@ -17,27 +17,22 @@ jobs:
           command: |
                       cd lumino-explorer-api
                       sudo env "PATH=$PATH" mvn install
-                      sudo env "PATH=$PATH" mvn verify
+                      sudo env "PATH=$PATH" mvn verify       
+  build-web:
+    working_directory: ~/tpm
+    docker:
+      - image: circleci/node:10
       - run:
-          name: Prepare npm
-          command: |
-                    curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-                    sudo apt update
-                    sudo apt-get install -y nodejs
-                    sudo apt install npm
-                    sudo apt install build-essential
-      
-      - run:
-          name: Build & Test Explorer Web
+          name: Install lumino-explorer-web and run tests
           command: |
                     cd ~/tmp/lumino-explorer-web
                     npm install
                     npm build
-                    npm test          
-
+                    npm test
 workflows:
     commit:
         jobs:
-            - build
+            - build-api
+            - build-web
 
 
