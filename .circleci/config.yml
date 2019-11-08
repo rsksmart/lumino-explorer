@@ -18,23 +18,23 @@ jobs:
                       cd lumino-explorer-api
                       sudo env "PATH=$PATH" mvn install
                       sudo env "PATH=$PATH" mvn verify       
-  build-web:
-    working_directory: ~/tpm
-    docker:
-      - image: circleci/node:10
-    steps:
-      - checkout      
-      - run:
-          name: Install lumino-explorer-web and run tests
-          command: |
-                    cd lumino-explorer-web
-                    npm install
-                    npm run-script build
-                    npm test
+#  build-web:
+#    working_directory: ~/tpm
+#    docker:
+#      - image: circleci/node:10
+#    steps:
+#      - checkout      
+#      - run:
+#          name: Install lumino-explorer-web and run tests
+#          command: |
+#                    cd lumino-explorer-web
+#                    npm install
+#                    npm run-script build
+#                    npm test
 workflows:
     commit:
         jobs:
             - build-api
-            - build-web
+ #           - build-web
 
 
