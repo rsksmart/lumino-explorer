@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/openjdk:8-jdk
+      - image: circleci/openjdk:latest
     working_directory: ~/tmp
 
     environment:
@@ -16,8 +16,7 @@ jobs:
           name: Install lumino-explorer-api and run tests
           command: |
                       cd lumino-explorer-api
-                      mkdir logs
-                      mvn install
+                      sudo mvn install
                       sudo mvn verify
           
 
