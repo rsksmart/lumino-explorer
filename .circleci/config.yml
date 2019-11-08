@@ -27,7 +27,7 @@ jobs:
       - run:
           name: Install lumino-explorer-web and run tests
           command: |
-                    cd ~/tmp/lumino-explorer-web
+                    cd lumino-explorer-web
                     npm install
                     npm build
                     npm test
