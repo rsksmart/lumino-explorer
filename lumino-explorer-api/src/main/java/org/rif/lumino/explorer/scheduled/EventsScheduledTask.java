@@ -101,6 +101,7 @@ public class EventsScheduledTask {
         channelManager.processOpenChannelEvents(processEvents.get(ChannelState.Opened));
         channelManager.processClosedChannelEvents(processEvents.get(ChannelState.Closed));
         channelManager.processSettledChannelEvents(processEvents.get(ChannelState.Settled));
+        channelManager.processNewDepositChannelEvents(processEvents.get(ChannelState.NewDeposit));
     }
 
     private Map<ChannelState, List<EventData>> processEvents(String tokenNetworkAddress)
@@ -117,8 +118,11 @@ public class EventsScheduledTask {
         List<EventData> settledChannelEvents =
                 channelEventsService.getSettledChannelEvents(from, null, tokenNetworkAddress);
 
+        List<EventData> newDepositChannelEvents =
+                channelEventsService.getNewDepositChannelEvents(from, null, tokenNetworkAddress);
+
         return channelManager.mapChannelEventsToCrud(
-                openChannelEvents, closeChannelEvents, settledChannelEvents);
+                openChannelEvents, closeChannelEvents, settledChannelEvents, newDepositChannelEvents);
     }
 
     private void processTokensPersistence(List<EventData> registeredTokens) {

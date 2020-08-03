@@ -1,7 +1,10 @@
 ## Lumino Hub Connection
 This resource holds the connection count of the
 trusted Hub nodes.
-
+ 
+It also acts as a load balancing
+endpoint, providing the API Client with the url 
+of the most appropiate Hub to join to.
 
 ### Endpoints   
 #### ```POST /luminoHubConnection ```  

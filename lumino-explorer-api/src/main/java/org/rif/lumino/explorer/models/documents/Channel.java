@@ -4,6 +4,8 @@ import org.rif.lumino.explorer.models.enums.ChannelState;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigInteger;
+
 @Document(collection = "channel")
 public class Channel {
 
@@ -13,18 +15,21 @@ public class Channel {
     private String participantOneAddress;
     private String participantTwoAddress;
     private ChannelState channelState;
+    private BigInteger totalDeposit;
 
     public Channel(
             String id,
             String tokenNetworkAddress,
             String participantOneAddress,
             String participantTwoAddress,
-            ChannelState channelState) {
+            ChannelState channelState,
+            BigInteger totalDeposit) {
         this.id = id;
         this.tokenNetworkAddress = tokenNetworkAddress;
         this.participantOneAddress = participantOneAddress;
         this.participantTwoAddress = participantTwoAddress;
         this.channelState = channelState;
+        this.totalDeposit = totalDeposit;
     }
 
     public String getId() {
@@ -65,5 +70,13 @@ public class Channel {
 
     public void setTokenNetworkAddress(String tokenNetworkAddress) {
         this.tokenNetworkAddress = tokenNetworkAddress;
+    }
+
+    public BigInteger getTotalDeposit() {
+        return totalDeposit;
+    }
+
+    public void setTotalDeposit(BigInteger totalDeposit) {
+        this.totalDeposit = totalDeposit;
     }
 }

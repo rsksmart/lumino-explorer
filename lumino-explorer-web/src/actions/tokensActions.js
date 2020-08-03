@@ -1,13 +1,6 @@
-
-import axios from 'axios';
-import {LEAVE_SUCCEED, POLL_TOKENS, JOIN_SUCCEED} from "./types";
+import {POLL_TOKENS} from "./types";
 import {retrieveTokensData} from "../lib/tokens/tokensLogic.js";
 import {getNetworkJoinable} from "../services/tokensServices";
-import {toWei} from "../lib/amounts/weiConversion";
-import {getDecimals} from "../lib/tokens/tokensLogic";
-
-
-
 
 export const pollTokens = () =>
     (dispatch, getState) =>
