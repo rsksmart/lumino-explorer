@@ -6,8 +6,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("lumino_hub")
 public class LuminoHub {
 
-    public static final int MAX_CONNECTIONS = 50;
-
     @Id
     private String id;
 
