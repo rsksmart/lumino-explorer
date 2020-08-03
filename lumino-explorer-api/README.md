@@ -73,6 +73,20 @@ Bye
 ```
 
  3. Now you can check if api is running, going to http://localhost:8080. This is a default host and port if you run it locally.
+## Trusted Hub nodes
+In order to set up the load balancing endpoint, 
+you first need to configure a list of trusted Hub Nodes.
+
+In order to set a new Hub as trusted, add
+the following property (e.g. to the application.properties file):  
+``` lumino.explorer.hub.urls.$id = $url ``` 
+where **$id** is an arbitrary identifier for the node, and **$url** is its url. 
+
+There is also another property (`lumino.explorer.hub.maxConnections`)
+which sets the maximum amount of connections allowed per Hub.
+
+## API Documentation
+* [REST API Documentation](docs/api/v1/index.md)
 
 ## Additional help
 
@@ -106,9 +120,7 @@ Java home: $JAVA_HOME
 Default locale: $YOUR_LOCALE
 OS name: $YOUR_OS_VERSION
 ```
-
 ## Useful Links
-
 * [RIF Lumino Network documentation](https://www.rifos.org/rif-lumino-network/)
 * [http://explorer.lumino.rifos.org/]()
 * [RIF Lumino Contracts](https://github.com/rsksmart/lumino-contracts) 

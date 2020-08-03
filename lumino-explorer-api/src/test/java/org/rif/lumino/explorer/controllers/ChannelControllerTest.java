@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = ChannelController.class)
+    @WebMvcTest(controllers = ChannelController.class)
 public class ChannelControllerTest {
 
     private static final String CHANNEL_ENDPOINT = ControllerConstants.API_V1_VERSION_PATH + "/" + ChannelController.BASE_CONTROLLER_PATH;
