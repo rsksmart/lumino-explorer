@@ -5,6 +5,7 @@ import org.rif.lumino.explorer.boot.configuration.properties.LuminoHubProperties
 import org.rif.lumino.explorer.exceptions.MaxConnectionException;
 import org.rif.lumino.explorer.exceptions.NotFoundException;
 import org.rif.lumino.explorer.models.documents.LuminoHub;
+import org.rif.lumino.explorer.models.dto.LuminoHubDTO;
 import org.rif.lumino.explorer.repositories.LuminoHubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,11 +36,11 @@ public class LuminoHubManager {
    * and increases it by one.
    * @return url of the {@link org.rif.lumino.explorer.models.documents.LuminoHub}
    */
-  public String addConnectionAndGetUrl() {
+  public LuminoHubDTO addConnectionAndGetUrl() {
     LuminoHub hub = luminoNodeRepository.findFirstByOrderByConnectionCount()
             .orElseThrow(() -> new NotFoundException("There aren't  Lumino Hub nodes registered in the Explorer"));
     addConnection(hub);
-    return hub.getUrl();
+    return new LuminoHubDTO(hub.getUrl());
   }
 
   private void addConnection(LuminoHub hub) {

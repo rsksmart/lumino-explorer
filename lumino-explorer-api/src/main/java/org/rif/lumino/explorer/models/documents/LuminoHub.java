@@ -23,6 +23,11 @@ public class LuminoHub {
         this.connectionCount = 0;
     }
 
+    public LuminoHub(String url, int connectionCount) {
+        this.url = url;
+        this.connectionCount = connectionCount;
+    }
+
     public String getId() {
         return id;
     }
