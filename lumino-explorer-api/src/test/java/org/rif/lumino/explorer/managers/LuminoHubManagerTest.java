@@ -1,30 +1,24 @@
 package org.rif.lumino.explorer.managers;
 
-import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.Condition;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.rif.lumino.explorer.boot.configuration.properties.LuminoHubProperties;
-import org.rif.lumino.explorer.controllers.LuminoHubConnectionController;
 import org.rif.lumino.explorer.exceptions.MaxConnectionException;
 import org.rif.lumino.explorer.exceptions.NotFoundException;
 import org.rif.lumino.explorer.models.documents.LuminoHub;
 import org.rif.lumino.explorer.models.dto.LuminoHubDTO;
 import org.rif.lumino.explorer.repositories.LuminoHubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.TestComponent;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RunWith(SpringRunner.class)
@@ -52,8 +46,11 @@ public class LuminoHubManagerTest {
     @Before
     public void init() {
         Mockito.when(luminoHubProperties.getMaxConnections()).thenReturn(50);
+        Map<String, String> config = new HashMap<>();
+        config.put("test1", "http://localhost:1234");
+        config.put("test2", "http://localhost:1235");
         Mockito.when(luminoHubProperties.getUrls())
-                .thenReturn(Arrays.asList("http://localhost:1234","http://localhost:1235"));
+                .thenReturn(config);
 
     }
 

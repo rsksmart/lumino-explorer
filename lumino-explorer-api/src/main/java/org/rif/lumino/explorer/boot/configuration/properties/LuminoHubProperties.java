@@ -3,7 +3,6 @@ package org.rif.lumino.explorer.boot.configuration.properties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.List;
 import java.util.Map;
 
 @ConfigurationProperties("lumino.explorer.hub")
@@ -12,13 +11,13 @@ public class LuminoHubProperties {
 
     private Integer maxConnections;
 
-    private List<String> urls;
+    private Map<String, String> urls;
 
-    public List<String> getUrls() {
+    public Map<String, String> getUrls() {
         return urls;
     }
 
-    public void setUrls(List<String> urls) {
+    public void setUrls(Map<String, String> urls) {
         this.urls = urls;
     }
 
