@@ -9,7 +9,9 @@ import java.util.Map;
 @Configuration
 public class LuminoHubProperties {
 
-    private Integer maxConnections;
+    private long maxConnections;
+
+    private boolean useDefaults;
 
     private Map<String, String> urls;
 
@@ -21,11 +23,19 @@ public class LuminoHubProperties {
         this.urls = urls;
     }
 
-    public Integer getMaxConnections() {
+    public long getMaxConnections() {
         return maxConnections;
     }
 
-    public void setMaxConnections(Integer maxConnections) {
+    public void setMaxConnections(long maxConnections) {
         this.maxConnections = maxConnections;
+    }
+
+    public boolean isUseDefaults() {
+        return useDefaults;
+    }
+
+    public void setUseDefaults(boolean useDefaults) {
+        this.useDefaults = useDefaults;
     }
 }

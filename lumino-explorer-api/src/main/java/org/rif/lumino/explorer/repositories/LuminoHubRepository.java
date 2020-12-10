@@ -9,4 +9,10 @@ import java.util.Optional;
 public interface LuminoHubRepository extends MongoRepository<LuminoHub, String> {
 
     Optional<LuminoHub> findFirstByOrderByConnectionCount();
+
+    Optional<LuminoHub> findFirstByMaxConnectionsAllowedEqualsOrderByConnectionCount(long maxConnectionsAllowed);
+
+    Optional<LuminoHub> findByConnectedClientsContains(String address);
+
+    Optional<LuminoHub> findByUrl(String url);
 }
