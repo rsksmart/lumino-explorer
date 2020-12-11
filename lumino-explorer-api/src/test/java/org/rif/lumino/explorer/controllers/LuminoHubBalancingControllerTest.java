@@ -19,6 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RunWith(SpringRunner.class)
@@ -86,5 +88,64 @@ public class LuminoHubBalancingControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isConflict());
         Mockito.verify(this.luminoHubBalancingManager).addConnectionAndGetUrl(ADDRESS);
         Mockito.verifyNoMoreInteractions(this.luminoHubBalancingManager);
+    }
+
+    @Test
+    public void save() throws Exception {
+        LuminoHub luminoHub = new LuminoHub(EXPECTED_URL, 1);
+        Mockito.when(this.luminoHubBalancingManager.saveHub(EXPECTED_URL, 1))
+                .thenReturn(luminoHub);
+        this.mockMvc.perform(MockMvcRequestBuilders.post(BALANCING_CONTROLLER_PATH + "?url=" + EXPECTED_URL + "&maxConnectionsAllowed=1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.url")
+                        .value(Matchers.equalTo(EXPECTED_URL)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.maxConnectionsAllowed").value(Matchers.equalTo(1)));
+    }
+
+    @Test
+    public void update() throws Exception {
+        String luminoHubId = "someid";
+        LuminoHub luminoHubUpdated = new LuminoHub("someotherurl", 2);
+        Mockito.when(this.luminoHubBalancingManager.updateHub(luminoHubId, Optional.of(luminoHubUpdated.getUrl()), Optional.of(luminoHubUpdated.getMaxConnectionsAllowed())))
+                .thenReturn(luminoHubUpdated);
+        this.mockMvc.perform(MockMvcRequestBuilders.put(BALANCING_CONTROLLER_PATH + "/" + luminoHubId + "?newUrl=" + luminoHubUpdated.getUrl() + "&newMaxConnectionsAllowed=" + luminoHubUpdated.getMaxConnectionsAllowed()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.url")
+                        .value(Matchers.equalTo(luminoHubUpdated.getUrl())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.maxConnectionsAllowed").value(Matchers.equalTo(2)));
+    }
+
+    @Test
+    public void getHub() throws Exception {
+        String luminoHubId = "someid";
+        LuminoHub luminoHub = new LuminoHub(EXPECTED_URL, 1);
+        luminoHub.setId(luminoHubId);
+        Mockito.when(this.luminoHubBalancingManager.getHub(luminoHubId))
+                .thenReturn(luminoHub);
+        this.mockMvc.perform(MockMvcRequestBuilders.get(BALANCING_CONTROLLER_PATH + "/" + luminoHubId))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(Matchers.equalTo(luminoHubId)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.url").value(Matchers.equalTo(EXPECTED_URL)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.maxConnectionsAllowed").value(Matchers.equalTo(1)));
+    }
+
+    @Test
+    public void getHubs() throws Exception {
+        String luminoHubId = "someid";
+        LuminoHub luminoHub = new LuminoHub(EXPECTED_URL, 1);
+        luminoHub.setId(luminoHubId);
+        List<LuminoHub> hubs = new ArrayList<>();
+        hubs.add(luminoHub);
+        Mockito.when(this.luminoHubBalancingManager.getAllHubs())
+                .thenReturn(hubs);
+        this.mockMvc.perform(MockMvcRequestBuilders.get(BALANCING_CONTROLLER_PATH + "/" + luminoHubId))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void deleteHub() throws Exception {
+        String luminoHubId = "someid";
+        this.mockMvc.perform(MockMvcRequestBuilders.delete(BALANCING_CONTROLLER_PATH + "/" + luminoHubId))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }
