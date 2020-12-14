@@ -12,6 +12,8 @@ public interface LuminoHubRepository extends MongoRepository<LuminoHub, String> 
 
     Optional<LuminoHub> findFirstByMaxConnectionsAllowedEqualsOrderByConnectionCount(long maxConnectionsAllowed);
 
+    Optional<LuminoHub> findByInfiniteCapacityEqualsOrderByConnectionCount(boolean infiniteCapacity);
+
     Optional<LuminoHub> findByConnectedClientsContains(String address);
 
     Optional<LuminoHub> findByUrl(String url);

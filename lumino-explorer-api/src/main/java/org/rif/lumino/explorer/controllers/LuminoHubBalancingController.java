@@ -41,8 +41,9 @@ public class LuminoHubBalancingController {
     @PostMapping
     @ResponseBody
     public LuminoHub save(@RequestParam(name = "url") String url,
-                          @RequestParam(name = "maxConnectionsAllowed") long maxConnectionsAllowed) {
-        return luminoHubBalancingManager.saveHub(url, maxConnectionsAllowed);
+                          @RequestParam(name = "maxConnectionsAllowed") long maxConnectionsAllowed,
+                          @RequestParam(name = "infiniteCapacity", required = false, defaultValue = "false") boolean infiniteCapacity) {
+        return luminoHubBalancingManager.saveHub(url, maxConnectionsAllowed, infiniteCapacity);
     }
 
     @ApiOperation(value = "Update an existent hub with the new paramters")
@@ -50,8 +51,9 @@ public class LuminoHubBalancingController {
     @ResponseBody
     public LuminoHub update(@PathVariable(name = "id") String id,
                             @RequestParam(name = "newUrl", required = false) Optional<String> newUrl,
-                            @RequestParam(name = "newMaxConnectionsAllowed", required = false) Optional<Long> newMaxConnectionsAllowed) {
-        return luminoHubBalancingManager.updateHub(id, newUrl, newMaxConnectionsAllowed);
+                            @RequestParam(name = "newMaxConnectionsAllowed", required = false) Optional<Long> newMaxConnectionsAllowed,
+                            @RequestParam(name = "newInfiniteCapacity", required = false) Optional<Boolean> newInfiniteCapacity) {
+        return luminoHubBalancingManager.updateHub(id, newUrl, newMaxConnectionsAllowed, newInfiniteCapacity);
     }
 
     @ApiOperation(value = "Gets a hub by id")

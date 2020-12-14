@@ -13,38 +13,31 @@ public class LuminoHub {
     private String id;
 
     private String url;
+    private Set<String> connectedClients = new HashSet<>();
+    private long connectionCount = 0;
+    private long maxConnectionsAllowed = 0;
+    private boolean infiniteCapacity = true;
 
-    private Set<String> connectedClients;
-
-    private long connectionCount;
-
-    private long maxConnectionsAllowed;
-
-    public LuminoHub() {
-        this.connectedClients = new HashSet<>();
-        this.connectionCount = 0;
-        this.maxConnectionsAllowed = -1;
-    }
+    public LuminoHub() {}
 
     public LuminoHub(String url) {
         this.url = url;
-        this.connectedClients = new HashSet<>();
-        this.connectionCount = 0;
-        this.maxConnectionsAllowed = -1;
     }
 
     public LuminoHub(String url, HashSet<String> connectedClients) {
         this.url = url;
         this.connectedClients = connectedClients;
-        this.connectionCount = connectedClients.size();
-        this.maxConnectionsAllowed = -1;
     }
 
     public LuminoHub(String url, long maxConnectionsAllowed) {
         this.url = url;
-        this.connectedClients = new HashSet<>();
-        this.connectionCount = 0;
         this.maxConnectionsAllowed = maxConnectionsAllowed;
+        this.infiniteCapacity = false;
+    }
+
+    public LuminoHub(String url, boolean infiniteCapacity) {
+        this.url = url;
+        this.infiniteCapacity = infiniteCapacity;
     }
 
     public String getId() {
@@ -96,5 +89,13 @@ public class LuminoHub {
 
     public void setMaxConnectionsAllowed(long maxConnectionsAllowed) {
         this.maxConnectionsAllowed = maxConnectionsAllowed;
+    }
+
+    public boolean isInfiniteCapacity() {
+        return infiniteCapacity;
+    }
+
+    public void setInfiniteCapacity(boolean infiniteCapacity) {
+        this.infiniteCapacity = infiniteCapacity;
     }
 }

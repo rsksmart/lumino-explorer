@@ -10,18 +10,14 @@ import org.rif.lumino.explorer.models.dto.LuminoHubDTO;
 import org.rif.lumino.explorer.repositories.LuminoHubRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
 @Service
 public class LuminoHubBalancingManager {
-
-  private final long INFINITE_CAPACITY = -1;
 
   private final LuminoHubRepository luminoNodeRepository;
 
@@ -39,10 +35,18 @@ public class LuminoHubBalancingManager {
   @PostConstruct
   private void setupDefaults() {
     // Populate only if empty
-    if (luminoNodeRepository.findAll().isEmpty() && this.luminoHubProperties.isUseDefaults()) {
-      List<LuminoHub> hubs = luminoHubProperties.getUrls().values().stream()
-              .map(url -> new LuminoHub(url, this.luminoHubProperties.getMaxConnections())).collect(Collectors.toList());
-      luminoNodeRepository.saveAll(hubs);
+    if (this.luminoNodeRepository.findAll().isEmpty() && this.luminoHubProperties.isUseDefaults()) {
+      List<LuminoHub> hubs = this.luminoHubProperties.getUrl().entrySet().stream()
+              .map((entry) -> {
+                boolean hasInfiniteCapacity = this.luminoHubProperties.getInfiniteCapacity().getOrDefault(entry.getKey(), false);
+                Long capacity = this.luminoHubProperties.getMaxConnections().get(entry.getKey());
+                if (hasInfiniteCapacity || capacity == null) {
+                  return new LuminoHub(entry.getValue(), true);
+                } else {
+                  return new LuminoHub(entry.getValue(), capacity);
+                }
+              }).collect(Collectors.toList());
+      this.luminoNodeRepository.saveAll(hubs);
     }
   }
 
@@ -84,8 +88,8 @@ public class LuminoHubBalancingManager {
    * @param address the address for the client to add
    */
   private LuminoHub  addConnection(LuminoHub hub, String address) {
-    if (hub.getConnectionCount() >= hub.getMaxConnectionsAllowed() && hub.getMaxConnectionsAllowed() != INFINITE_CAPACITY) {
-      LuminoHub infiniteCapacityHub = this.luminoNodeRepository.findFirstByMaxConnectionsAllowedEqualsOrderByConnectionCount(INFINITE_CAPACITY)
+    if (hub.getConnectionCount() >= hub.getMaxConnectionsAllowed() && !hub.isInfiniteCapacity()) {
+      LuminoHub infiniteCapacityHub = this.luminoNodeRepository.findByInfiniteCapacityEqualsOrderByConnectionCount(true)
               .orElseThrow(() -> new MaxConnectionException("There isn't any Lumino Hub node with free connection slots"));
       infiniteCapacityHub.addConnection(address);
       this.luminoNodeRepository.save(infiniteCapacityHub);
@@ -102,17 +106,19 @@ public class LuminoHubBalancingManager {
    * If the url already exists then it throws an exception
    * @param url the hub url
    * @param maxConnectionsAllowed the max allowed connections for this hub
+   * @param infiniteCapacity indicates if the hub should have infinite capacity
    * @throws AlreadyExistException when already exists some hub with that url
    */
-  public LuminoHub saveHub(String url, long maxConnectionsAllowed) {
+  public LuminoHub saveHub(String url, long maxConnectionsAllowed, boolean infiniteCapacity) {
     Optional<LuminoHub> currentHub = this.luminoNodeRepository.findByUrl(url);
     if (currentHub.isPresent()) {
       throw new AlreadyExistException(String.format("Hub Already exists with this url %s", url));
     }
-    if (maxConnectionsAllowed != INFINITE_CAPACITY && maxConnectionsAllowed <= 0) {
+    if (!infiniteCapacity && maxConnectionsAllowed <= 0) {
       throw new BadRequest("A hub should have at least maxConnectionsAllowed set to 1 or otherwise -1 to put maxConnectionsAllowed as infinite");
     }
-    LuminoHub hub = new LuminoHub(url, maxConnectionsAllowed);
+
+    LuminoHub hub = infiniteCapacity ? new LuminoHub(url, true) : new LuminoHub(url, maxConnectionsAllowed);
     return this.luminoNodeRepository.save(hub);
   }
 
@@ -142,11 +148,14 @@ public class LuminoHubBalancingManager {
    * @param id the hub id to search for
    * @param newUrl the new url for this hub
    * @param newMaxConnectionsAllowed the new max allowed connections for this hub
+   * @param newInfiniteCapacity the new value for infinite capacity
    * @throws NotFoundException when the hub with that id doesn't exists
    * @throws AlreadyExistException when already exists some hub with that url
    * @throws BadRequest when the newMaxConnectionsAllowed is lower than the current value
    */
-  public LuminoHub updateHub(String id, Optional<String> newUrl, Optional<Long> newMaxConnectionsAllowed) {
+  public LuminoHub updateHub(String id, Optional<String> newUrl,
+                             Optional<Long> newMaxConnectionsAllowed,
+                             Optional<Boolean> newInfiniteCapacity) {
     Optional<LuminoHub> currentHub = this.luminoNodeRepository.findById(id);
     return currentHub.map(hub -> {
       newUrl.ifPresent(url -> {
@@ -156,15 +165,20 @@ public class LuminoHubBalancingManager {
         }
         hub.setUrl(url);
       });
-      newMaxConnectionsAllowed.ifPresent(maxConnectionsAllowed -> {
-        if (hub.getConnectedClients().size() > maxConnectionsAllowed && INFINITE_CAPACITY != maxConnectionsAllowed) {
-          throw new BadRequest(String.format(
-                  "Can't change a hub with newMaxConnectionsAllowed %d because is lower than the current connected client list size %d",
-                  maxConnectionsAllowed,
-                  hub.getConnectedClients().size()));
-        }
-        hub.setMaxConnectionsAllowed(maxConnectionsAllowed);
-      });
+      if (!newInfiniteCapacity.orElse(false)) {
+        newMaxConnectionsAllowed.ifPresent(maxConnectionsAllowed -> {
+          if (hub.getConnectedClients().size() > maxConnectionsAllowed) {
+            throw new BadRequest(String.format(
+                    "Can't change a hub with newMaxConnectionsAllowed %d because is lower than the current connected client list size %d",
+                    maxConnectionsAllowed,
+                    hub.getConnectedClients().size()));
+          }
+          hub.setMaxConnectionsAllowed(maxConnectionsAllowed);
+        });
+      } else {
+        // infinite capacity change to true
+        hub.setInfiniteCapacity(true);
+      }
       return this.luminoNodeRepository.save(hub);
     }).orElseThrow(() -> new NotFoundException(String.format("No Lumino Hub Found with id %s", id)));
   }

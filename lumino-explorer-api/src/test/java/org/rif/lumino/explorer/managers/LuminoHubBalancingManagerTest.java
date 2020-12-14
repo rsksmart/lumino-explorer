@@ -47,13 +47,22 @@ public class LuminoHubBalancingManagerTest {
 
     @Before
     public void init() {
-        Mockito.when(this.luminoHubProperties.getMaxConnections()).thenReturn(50L);
+        Map<String, String> url = new HashMap<>();
+        url.put("test1", "http://localhost:1234");
+        url.put("test2", "http://localhost:1235");
+
+        Map<String, Long> maxConnections = new HashMap<>();
+        maxConnections.put("test1", 10L);
+        maxConnections.put("test2", 10L);
+
+        Map<String, Boolean> infiniteCapacity = new HashMap<>();
+        infiniteCapacity.put("test1", false);
+        infiniteCapacity.put("test2", false);
+
         Mockito.when(this.luminoHubProperties.isUseDefaults()).thenReturn(true);
-        Map<String, String> config = new HashMap<>();
-        config.put("test1", "http://localhost:1234");
-        config.put("test2", "http://localhost:1235");
-        Mockito.when(this.luminoHubProperties.getUrls())
-                .thenReturn(config);
+        Mockito.when(this.luminoHubProperties.getMaxConnections()).thenReturn(maxConnections);
+        Mockito.when(this.luminoHubProperties.getInfiniteCapacity()).thenReturn(infiniteCapacity);
+        Mockito.when(this.luminoHubProperties.getUrl()).thenReturn(url);
     }
 
     @Test
