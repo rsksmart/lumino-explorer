@@ -111,11 +111,15 @@ public class LuminoHubBalancingControllerTest {
                 Optional.of(luminoHubUpdated.getMaxConnectionsAllowed()),
                 Optional.of(luminoHubUpdated.isInfiniteCapacity())))
                 .thenReturn(luminoHubUpdated);
-        this.mockMvc.perform(MockMvcRequestBuilders.put(BALANCING_CONTROLLER_PATH + "/" + luminoHubId + "?newUrl=" + luminoHubUpdated.getUrl() + "&newMaxConnectionsAllowed=" + luminoHubUpdated.getMaxConnectionsAllowed()))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.url")
-                        .value(Matchers.equalTo(luminoHubUpdated.getUrl())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.maxConnectionsAllowed").value(Matchers.equalTo(2)));
+        this.mockMvc.perform(MockMvcRequestBuilders.put(
+                BALANCING_CONTROLLER_PATH + "/" + luminoHubId +
+                        "?newUrl=" + luminoHubUpdated.getUrl() +
+                        "&newMaxConnectionsAllowed=" + luminoHubUpdated.getMaxConnectionsAllowed() +
+                        "&newInfiniteCapacity=" + luminoHubUpdated.isInfiniteCapacity()))
+                            .andExpect(MockMvcResultMatchers.status().isOk())
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.url")
+                                    .value(Matchers.equalTo(luminoHubUpdated.getUrl())))
+                            .andExpect(MockMvcResultMatchers.jsonPath("$.maxConnectionsAllowed").value(Matchers.equalTo(2)));
     }
 
     @Test

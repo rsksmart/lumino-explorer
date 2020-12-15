@@ -41,7 +41,7 @@ public class LuminoHubBalancingController {
     @PostMapping
     @ResponseBody
     public LuminoHub save(@RequestParam(name = "url") String url,
-                          @RequestParam(name = "maxConnectionsAllowed") long maxConnectionsAllowed,
+                          @RequestParam(name = "maxConnectionsAllowed", required = false, defaultValue = "0") long maxConnectionsAllowed,
                           @RequestParam(name = "infiniteCapacity", required = false, defaultValue = "false") boolean infiniteCapacity) {
         return luminoHubBalancingManager.saveHub(url, maxConnectionsAllowed, infiniteCapacity);
     }

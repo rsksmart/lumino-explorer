@@ -175,6 +175,13 @@ public class LuminoHubBalancingManager {
           }
           hub.setMaxConnectionsAllowed(maxConnectionsAllowed);
         });
+        if (!newMaxConnectionsAllowed.isPresent()) {
+          if (hub.getConnectedClients().size() > hub.getMaxConnectionsAllowed()) {
+            hub.setMaxConnectionsAllowed(hub.getConnectedClients().size());
+          }
+        }
+        // infinite capacity change to true
+        hub.setInfiniteCapacity(false);
       } else {
         // infinite capacity change to true
         hub.setInfiniteCapacity(true);
