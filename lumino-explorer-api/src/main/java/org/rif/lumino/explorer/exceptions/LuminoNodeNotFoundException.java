@@ -1,9 +1,24 @@
 package org.rif.lumino.explorer.exceptions;
 
-public class LuminoNodeNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public class LuminoNodeNotFoundException extends ApiException {
 
     public LuminoNodeNotFoundException(String nodeId) {
-        super("Could not find node: " + nodeId);
+        super(String.format("Could not find node: %s",nodeId));
+    }
+
+    public LuminoNodeNotFoundException() {
+        super();
+    }
+
+    public LuminoNodeNotFoundException(Throwable throwable) {
+        super(throwable);
+    }
+
+    @Override
+    public HttpStatus getStatus() {
+        return HttpStatus.NOT_FOUND;
     }
 
 }

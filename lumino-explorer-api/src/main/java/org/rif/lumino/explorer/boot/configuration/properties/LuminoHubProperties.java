@@ -9,23 +9,41 @@ import java.util.Map;
 @Configuration
 public class LuminoHubProperties {
 
-    private Integer maxConnections;
+    private boolean useDefaults;
 
-    private Map<String, String> urls;
+    private Map<String, String> url;
+    private Map<String, Boolean> infiniteCapacity;
+    private Map<String, Long> maxConnections;
 
-    public Map<String, String> getUrls() {
-        return urls;
+    public boolean isUseDefaults() {
+        return useDefaults;
     }
 
-    public void setUrls(Map<String, String> urls) {
-        this.urls = urls;
+    public void setUseDefaults(boolean useDefaults) {
+        this.useDefaults = useDefaults;
     }
 
-    public Integer getMaxConnections() {
+    public Map<String, String> getUrl() {
+        return url;
+    }
+
+    public void setUrl(Map<String, String> url) {
+        this.url = url;
+    }
+
+    public Map<String, Boolean> getInfiniteCapacity() {
+        return infiniteCapacity;
+    }
+
+    public void setInfiniteCapacity(Map<String, Boolean> infiniteCapacity) {
+        this.infiniteCapacity = infiniteCapacity;
+    }
+
+    public Map<String, Long> getMaxConnections() {
         return maxConnections;
     }
 
-    public void setMaxConnections(Integer maxConnections) {
+    public void setMaxConnections(Map<String, Long> maxConnections) {
         this.maxConnections = maxConnections;
     }
 }

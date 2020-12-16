@@ -2,22 +2,23 @@ package org.rif.lumino.explorer.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class NotFoundException extends ApiException {
+public class BadRequest extends ApiException {
 
-  public NotFoundException(String message) {
+  public BadRequest(String message) {
     super(message);
   }
 
-  public NotFoundException() {
+  public BadRequest() {
     super();
   }
 
-  public NotFoundException(Throwable throwable) {
+  public BadRequest(Throwable throwable) {
     super(throwable);
   }
 
   @Override
   public HttpStatus getStatus() {
-    return HttpStatus.NOT_FOUND;
+    return HttpStatus.BAD_REQUEST;
   }
+
 }
