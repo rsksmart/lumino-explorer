@@ -17,51 +17,36 @@
 ## Build RIF Lumino Explorer API from code
 
 1. Get the code by cloning this repo
-2. Go to the path you downloaded or cloned Lumino's code (lets call this path `$RIF_LUMINO_EXPLORER_API_PATH`)
-3. Go to the application.properties and set the `lumino.contract.tokenNetworkRegistry` property, set the value with your Token Network registry. 
-4. Set the `lumino.explorer.api.account.file` property to the .json file of your RSK account. Example: `lumino.explorer.api.account.file=UTC--2019-04-19T15-07-00.568000000Z--034000b5f2862d114e4b3474f79fc64aad0cb742.json`
+2. Go to the path you downloaded or cloned Lumino Explorer API code (lets call this path 
+   `$RIF_LUMINO_EXPLORER_API_PATH`)
+3. Go to the `$RIF_LUMINO_EXPLORER_API_PATH/src/main/resources/application.properties` 
+   file and set the `spring.profiles.active` to the profile of your preference.
+4. Now edit the properties file of your selected profile (Ex: if we use the profile called `dev`,
+   the file to edit is `$RIF_LUMINO_EXPLORER_API_PATH/src/main/resources/application-dev.properties`).
+5. Set the `lumino.contract.tokenNetworkRegistry` property on that file. 
+   The value with your Lumino Token Network Registry.
+   - For TestNet that property has to be like this: `lumino.contract.tokenNetworkRegistry=0x47E5b7d85Da2004781FeD64aeEe414eA9CdC4f17`
+   - For MainNet that property has to be like this: `lumino.contract.tokenNetworkRegistry=0x060B81E90894E1F38A625C186CB1F4f9dD86A2B5`
+6. Set the `lumino.explorer.api.account.file` property to the .json file of your RSK account. This
+   path can be absolute or relative to `$RIF_LUMINO_EXPLORER_API_PATH/src/main/resources`.
+   (Ex: `lumino.explorer.api.account.file=UTC--2019-04-19T15-07-00.568000000Z--034000b5f2862d114e4b3474f79fc64aad0cb742.json`).
+   Note: you must put the .json file of your account here or you can just use the keystore file that is on resources. There is no need to have funds into your account.
+7. Set the `lumino.explorer.api.account.password` property to the password of your account.
+   (Ex: `lumino.explorer.api.account.paassword=3XhLXn[(Tub6'~Qe`)
 
-5. Set the `lumino.explorer.api.account.password` property to the password of your account. Example: `lumino.explorer.api.account.paassword=3XhLXn[(Tub6'~Qe`
-
-6. Install project dependencies with the follow command:
+8. Install project dependencies with the follow command:
 
 ``` mvn install```
 
 ## Set Up Mongo Database
 
- 1. Go to `$RIF_LUMINO_EXPLORER_API_PATH/src/main/resources/database/`
+ 1. Execute the mongo database setup script, to do this you have 2 options:
+   - If you are working on your local machine, you have to run:
+     - ```mongo $RIF_LUMINO_EXPLORER_API_PATH/src/main/resources/database/lumino-explorer-api-database-setup.js```
+   - Otherwise, you have to specify a host, port and authentication credentials:
+     - ```mongo --host <hostname> -u <username> -p <password> $RIF_LUMINO_EXPLORER_API_PATH/src/main/resources/database/lumino-explorer-api-database-setup.js```
 
- 2. Run the following command when the mongodb server is installed on the local machine:
-
-```user:~/mongo lumino-explorer-api-database-setup.js```
-
-If not, you must execute the following script, specifying a host, port and authentication credentials
-
-```user:~/mongo --host <hostname> -u <username> -p <password> lumino-explorer-api-database-setup.js```
-
-Example:
-
-```user:~/mongo --host 10.10.7.161:27017 -u mongodb -p mongodb lumino-explorer-api-database-setup.js```
-
- 3. After you run mongo shell command, you will be presented with the following message:
-
-```
-MongoDB shell version $MONGO_SERVER_VERSION
-connecting to: mongodb:$MONGO_HOST:$MONGO_PORT
-MongoDB server version: $MONGO_SERVER_VERSION
-Switched to db lumino_explorer
-Creating a new collection with name event_job_metadata
-WriteResult({ "nInserted" : 1 })
-New  database with name lumino_explorer is created succesfully
-The collections into database are:
-event_job_metadata
-The count of elements into my event_job_metadata is :
-1
-All is done, Now you can run the lumino-explorer-api
-Bye
-
-```
-
+ 2. After running the mongo script you will see a lot of script messages, at the end it should appear `All is done, Now you can run the lumino-explorer-api`.
 
 ## Start your RIF Lumino Explorer API
 
@@ -72,19 +57,26 @@ Bye
  mvn spring-boot:run
 ```
 
- 3. Now you can check if api is running, going to http://localhost:8080. This is a default host and port if you run it locally.
+ 3. Now you can check if api is running, going to `http://localhost:8080/api/v1/dashboard`. http://localhost:8080 is the default host and port if you run it locally.
+
 ## Trusted Hub nodes
-In order to set up the load balancing endpoint, 
-you first need to configure a list of trusted Hub Nodes.
+In order to set up the load balancing endpoint, you first need to configure a list of trusted Hub Nodes.
 
-In order to set a new Hub as trusted, add
-the following property (e.g. to the application.properties file):  
-``` lumino.explorer.hub.urls.$id = $url ``` 
-where **$id** is an arbitrary identifier for the node, and **$url** is its url. 
-
-There is also another property (`lumino.explorer.hub.maxConnections`)
-which sets the maximum amount of connections allowed per Hub.
-
+1. You have to edit your profile properties file (Ex: `$RIF_LUMINO_EXPLORER_API_PATH/src/main/resources/application-dev.properties`):
+- To make the explorer api start with these hub nodes you have to set the property `lumino.explorer.hub.useDefaults` to `true`. If false
+  the explorer will start without trusted hubs.
+- Add the following properties for each trusted hub that you want to add:
+  ```yaml
+  lumino.explorer.hub.url.$id=$url
+  lumino.explorer.hub.infiniteCapacity.$id=$infiniteCapacity
+  lumino.explorer.hub.maxConnections.$id=$maxConnections
+  ```
+  Where the values:
+  * **$id**: it's an arbitrary identifier for the hub node. 
+  * **$url**: it's the url for the hub node to be exposed to the clients.
+  * **$infiniteCapacity**: it's the boolean flag that says if a hub has or not infinite capacity.
+  * **$maxConnections**: it's the maximum of allowed connections on that hub node.
+   
 ## API Documentation
 * [REST API Documentation](docs/api/v1/index.md)
 
