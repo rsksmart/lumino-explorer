@@ -85,6 +85,24 @@ In order to set up the load balancing endpoint, you first need to configure a li
   * **$url**: it's the url for the hub node to be exposed to the clients.
   * **$infiniteCapacity**: it's the boolean flag that says if a hub has or not infinite capacity.
   * **$maxConnections**: it's the maximum of allowed connections on that hub node.
+    
+## Trusted Hubs On MainNet
+To setup the mainnet trusted hubs you need to specify these inside these properties inside your application properties file:
+```yaml
+umino.explorer.hub.useDefaults=true
+
+lumino.explorer.hub.url.lighthub1=http://lighthub01.rifos.org:5001/api/v1
+lumino.explorer.hub.infiniteCapacity.lighthub1=false
+lumino.explorer.hub.maxConnections.lighthub1=50
+
+lumino.explorer.hub.url.lighthub2=http://lighthub02.rifos.org:5001/api/v1
+lumino.explorer.hub.infiniteCapacity.lighthub2=false
+lumino.explorer.hub.maxConnections.lighthub2=50
+
+lumino.explorer.hub.url.lighthub3=http://lighthub03.rifos.org:5001/api/v1
+lumino.explorer.hub.infiniteCapacity.lighthub3=false
+lumino.explorer.hub.maxConnections.lighthub3=50
+```
    
 ## API Documentation
 * [REST API Documentation](docs/api/v1/index.md)
