@@ -90,7 +90,7 @@ In order to set up the load balancing endpoint, you first need to configure a li
 ## Trusted Hubs On MainNet
 To setup the mainnet trusted hubs you need to specify these inside these properties inside your application properties file:
 ```yaml
-umino.explorer.hub.useDefaults=true
+lumino.explorer.hub.useDefaults=true
 
 lumino.explorer.hub.url.lighthub1=http://lighthub01.rifos.org:5001/api/v1
 lumino.explorer.hub.infiniteCapacity.lighthub1=false
