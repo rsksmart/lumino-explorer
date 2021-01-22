@@ -30,7 +30,6 @@
 6. Set the `lumino.explorer.api.account.file` property to the .json file of your RSK account. This
    path can be absolute or relative to `$RIF_LUMINO_EXPLORER_API_PATH/src/main/resources`.
    (Ex: `lumino.explorer.api.account.file=UTC--2019-04-19T15-07-00.568000000Z--034000b5f2862d114e4b3474f79fc64aad0cb742.json`).
-   Note: you must put the .json file of your account here or you can just use the keystore file that is on resources. There is no need to have funds into your account.
 7. Set the `lumino.explorer.api.account.password` property to the password of your account.
    (Ex: `lumino.explorer.api.account.paassword=3XhLXn[(Tub6'~Qe`)
 
@@ -47,6 +46,15 @@
      - ```mongo --host <hostname> -u <username> -p <password> $RIF_LUMINO_EXPLORER_API_PATH/src/main/resources/database/lumino-explorer-api-database-setup.js```
 
  2. After running the mongo script you will see a lot of script messages, at the end it should appear `All is done, Now you can run the lumino-explorer-api`.
+
+### Reinstalling the Project
+If you have an already installed project version, you need to this steps to update it:
+
+1. Stop the API .
+2. Git pull from the branch you want to update (ex: git pull origin master).
+3. Maven install to update the libraries.
+4. Setup Mongo Database (this is to reset the db).
+5. Start the API again.
 
 ## Start your RIF Lumino Explorer API
 
