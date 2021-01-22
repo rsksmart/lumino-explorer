@@ -25,6 +25,8 @@
    the file to edit is `$RIF_LUMINO_EXPLORER_API_PATH/src/main/resources/application-dev.properties`).
 5. Set the `lumino.contract.tokenNetworkRegistry` property on that file. 
    The value with your Lumino Token Network Registry.
+   - For TestNet that property has to be like this: `lumino.contract.tokenNetworkRegistry=0x47E5b7d85Da2004781FeD64aeEe414eA9CdC4f17`
+   - For MainNet that property has to be like this: `lumino.contract.tokenNetworkRegistry=0x060B81E90894E1F38A625C186CB1F4f9dD86A2B5`
 6. Set the `lumino.explorer.api.account.file` property to the .json file of your RSK account. This
    path can be absolute or relative to `$RIF_LUMINO_EXPLORER_API_PATH/src/main/resources`.
    (Ex: `lumino.explorer.api.account.file=UTC--2019-04-19T15-07-00.568000000Z--034000b5f2862d114e4b3474f79fc64aad0cb742.json`).
