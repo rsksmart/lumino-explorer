@@ -47,6 +47,15 @@
 
  2. After running the mongo script you will see a lot of script messages, at the end it should appear `All is done, Now you can run the lumino-explorer-api`.
 
+### Reinstalling the Project
+If you have an already installed project version, you need to this steps to update it:
+
+1. Stop the API .
+2. Git pull from the branch you want to update (ex: git pull origin master).
+3. Maven install to update the libraries.
+4. Setup Mongo Database (this is to reset the db).
+5. Start the API again.
+
 ## Start your RIF Lumino Explorer API
 
 1. Go to `$RIF_LUMINO_EXPLORER_API_PATH`
