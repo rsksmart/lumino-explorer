@@ -30,6 +30,7 @@
 6. Set the `lumino.explorer.api.account.file` property to the .json file of your RSK account. This
    path can be absolute or relative to `$RIF_LUMINO_EXPLORER_API_PATH/src/main/resources`.
    (Ex: `lumino.explorer.api.account.file=UTC--2019-04-19T15-07-00.568000000Z--034000b5f2862d114e4b3474f79fc64aad0cb742.json`).
+   - Note: you must put the .json file of your account here or you can just use the keystore file that is on resources. There is no need to have funds into your account.
 7. Set the `lumino.explorer.api.account.password` property to the password of your account.
    (Ex: `lumino.explorer.api.account.paassword=3XhLXn[(Tub6'~Qe`)
 
