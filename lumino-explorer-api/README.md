@@ -49,7 +49,7 @@
 
  2. After running the mongo script you will see a lot of script messages, at the end it should appear `All is done, Now you can run the lumino-explorer-api`.
 
-### Reinstalling the Project
+## Reinstalling the Project
 If you have an already installed project version, you need to this steps to update it:
 
 1. Stop the API .
@@ -60,6 +60,19 @@ If you have an already installed project version, you need to this steps to upda
 
 ## Start your RIF Lumino Explorer API
 
+### Preconditions
+Lumino Explorer API uses `eth_getLogs` rpc to get the information about events, therefore the RSK node must respond in a reasonable 
+timeframe (< 30s)
+
+Since the `eth_getLogs` result is cached, it will take a long time for this call to finish the first time it is executed after the RSK node is started. This will happen each time the RSK node boots.
+After this, each call should be finished in a reasonable time.
+
+Use this curl to test the `eth_getLogs` response:
+```
+curl -X POST http://localhost:4444 -H 'Content-Type: application/json' -d '{"jsonrpc":"2.0","method":"eth_getLogs","params":[{"address":"0xde2D53e8d0E673A4b1D9054cE83091777F2fd8Ce","fromBlock":"0x0","toBlock":"latest"}],"id":74}'
+```
+
+### Start the application
 1. Go to `$RIF_LUMINO_EXPLORER_API_PATH`
 2. Run the following command:
 
@@ -87,23 +100,7 @@ In order to set up the load balancing endpoint, you first need to configure a li
   * **$infiniteCapacity**: it's the boolean flag that says if a hub has or not infinite capacity.
   * **$maxConnections**: it's the maximum of allowed connections on that hub node.
     
-## Trusted Hubs On MainNet
-To setup the mainnet trusted hubs you need to specify these inside these properties inside your application properties file:
-```yaml
-lumino.explorer.hub.useDefaults=true
 
-lumino.explorer.hub.url.lighthub1=http://lighthub01.rifos.org:5001/api/v1
-lumino.explorer.hub.infiniteCapacity.lighthub1=false
-lumino.explorer.hub.maxConnections.lighthub1=50
-
-lumino.explorer.hub.url.lighthub2=http://lighthub02.rifos.org:5001/api/v1
-lumino.explorer.hub.infiniteCapacity.lighthub2=false
-lumino.explorer.hub.maxConnections.lighthub2=50
-
-lumino.explorer.hub.url.lighthub3=http://lighthub03.rifos.org:5001/api/v1
-lumino.explorer.hub.infiniteCapacity.lighthub3=false
-lumino.explorer.hub.maxConnections.lighthub3=50
-```
    
 ## API Documentation
 * [REST API Documentation](docs/api/v1/index.md)
