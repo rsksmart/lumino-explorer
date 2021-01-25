@@ -11,7 +11,6 @@
 2. Mongo Database Server (Version 3.6.x)
 3. Java 8 (Lastest Release)
 4. Maven (Version 3.6.x)
-5. RSK valid account
 
 
 ## Build RIF Lumino Explorer API from code
@@ -20,34 +19,28 @@
 2. Go to the path you downloaded or cloned Lumino Explorer API code (lets call this path 
    `$RIF_LUMINO_EXPLORER_API_PATH`)
 3. Go to the `$RIF_LUMINO_EXPLORER_API_PATH/src/main/resources/application.properties` 
-   file and set the `spring.profiles.active` to the profile of your preference.
+   file and set the `spring.profiles.active` to the profile of your preference. For Mainnet leave it as-is.
 4. Now edit the properties file of your selected profile (Ex: if we use the profile called `dev`,
    the file to edit is `$RIF_LUMINO_EXPLORER_API_PATH/src/main/resources/application-dev.properties`).
 5. Set the `lumino.contract.tokenNetworkRegistry` property on that file. 
    The value with your Lumino Token Network Registry.
    - For TestNet that property has to be like this: `lumino.contract.tokenNetworkRegistry=0x47E5b7d85Da2004781FeD64aeEe414eA9CdC4f17`
    - For MainNet that property has to be like this: `lumino.contract.tokenNetworkRegistry=0x060B81E90894E1F38A625C186CB1F4f9dD86A2B5`
-6. Set the `lumino.explorer.api.account.file` property to the .json file of your RSK account. This
-   path can be absolute or relative to `$RIF_LUMINO_EXPLORER_API_PATH/src/main/resources`.
-   (Ex: `lumino.explorer.api.account.file=UTC--2019-04-19T15-07-00.568000000Z--034000b5f2862d114e4b3474f79fc64aad0cb742.json`).
-7. Set the `lumino.explorer.api.account.password` property to the password of your account.
-   (Ex: `lumino.explorer.api.account.paassword=3XhLXn[(Tub6'~Qe`)
-
-8. Install project dependencies with the follow command:
+6. Go to `$RIF_LUMINO_EXPLORER_API_PATH` again and install project dependencies with the following command:
 
 ``` mvn install```
 
 ## Set Up Mongo Database
 
- 1. Execute the mongo database setup script, to do this you have 2 options:
+1. Execute the mongo database setup script, to do this you have 2 options:
    - If you are working on your local machine, you have to run:
      - ```mongo $RIF_LUMINO_EXPLORER_API_PATH/src/main/resources/database/lumino-explorer-api-database-setup.js```
    - Otherwise, you have to specify a host, port and authentication credentials:
      - ```mongo --host <hostname> -u <username> -p <password> $RIF_LUMINO_EXPLORER_API_PATH/src/main/resources/database/lumino-explorer-api-database-setup.js```
 
- 2. After running the mongo script you will see a lot of script messages, at the end it should appear `All is done, Now you can run the lumino-explorer-api`.
+2. After running the mongo script you will see a lot of script messages, at the end it should appear `All is done, Now you can run the lumino-explorer-api`.
 
-### Reinstalling the Project
+## Reinstalling the Project
 If you have an already installed project version, you need to this steps to update it:
 
 1. Stop the API .
@@ -58,6 +51,19 @@ If you have an already installed project version, you need to this steps to upda
 
 ## Start your RIF Lumino Explorer API
 
+### Preconditions
+Lumino Explorer API uses `eth_getLogs` rpc to get the information about events, therefore the RSK node must respond in a reasonable 
+timeframe (< 30s)
+
+Since the `eth_getLogs` result is cached, it will take a long time for this call to finish the first time it is executed after the RSK node is started. This will happen each time the RSK node boots.
+After this, each call should be finished in a reasonable time.
+
+Use this curl to test the `eth_getLogs` response:
+```
+curl -X POST http://localhost:4444 -H 'Content-Type: application/json' -d '{"jsonrpc":"2.0","method":"eth_getLogs","params":[{"address":"0xde2D53e8d0E673A4b1D9054cE83091777F2fd8Ce","fromBlock":"0x0","toBlock":"latest"}],"id":74}'
+```
+
+### Start the application
 1. Go to `$RIF_LUMINO_EXPLORER_API_PATH`
 2. Run the following command:
 
@@ -84,6 +90,8 @@ In order to set up the load balancing endpoint, you first need to configure a li
   * **$url**: it's the url for the hub node to be exposed to the clients.
   * **$infiniteCapacity**: it's the boolean flag that says if a hub has or not infinite capacity.
   * **$maxConnections**: it's the maximum of allowed connections on that hub node.
+    
+
    
 ## API Documentation
 * [REST API Documentation](docs/api/v1/index.md)
