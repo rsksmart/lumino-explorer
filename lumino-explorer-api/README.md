@@ -11,7 +11,6 @@
 2. Mongo Database Server (Version 3.6.x)
 3. Java 8 (Lastest Release)
 4. Maven (Version 3.6.x)
-5. RSK valid account
 
 
 ## Build RIF Lumino Explorer API from code
@@ -20,34 +19,26 @@
 2. Go to the path you downloaded or cloned Lumino Explorer API code (lets call this path 
    `$RIF_LUMINO_EXPLORER_API_PATH`)
 3. Go to the `$RIF_LUMINO_EXPLORER_API_PATH/src/main/resources/application.properties` 
-   file and set the `spring.profiles.active` to the profile of your preference.
+   file and set the `spring.profiles.active` to the profile of your preference. For Mainnet leave it as-is.
 4. Now edit the properties file of your selected profile (Ex: if we use the profile called `dev`,
    the file to edit is `$RIF_LUMINO_EXPLORER_API_PATH/src/main/resources/application-dev.properties`).
 5. Set the `lumino.contract.tokenNetworkRegistry` property on that file. 
    The value with your Lumino Token Network Registry.
    - For TestNet that property has to be like this: `lumino.contract.tokenNetworkRegistry=0x47E5b7d85Da2004781FeD64aeEe414eA9CdC4f17`
    - For MainNet that property has to be like this: `lumino.contract.tokenNetworkRegistry=0x060B81E90894E1F38A625C186CB1F4f9dD86A2B5`
-6. Set the `lumino.explorer.api.account.file` property to the .json file of your RSK account. This
-   path can be absolute or relative to `$RIF_LUMINO_EXPLORER_API_PATH/src/main/resources`.
-   (Ex: `lumino.explorer.api.account.file=UTC--2019-04-19T15-07-00.568000000Z--034000b5f2862d114e4b3474f79fc64aad0cb742.json`).
-   - Note: you must put the .json file of your account or you can just use the keystore file that is on resources. 
-     There is no need to have funds into your account.
-7. Set the `lumino.explorer.api.account.password` property to the password of your account.
-   (Ex: `lumino.explorer.api.account.paassword=3XhLXn[(Tub6'~Qe`)
-
-8. Install project dependencies with the follow command:
+6. Go to `$RIF_LUMINO_EXPLORER_API_PATH` again and install project dependencies with the following command:
 
 ``` mvn install```
 
 ## Set Up Mongo Database
 
- 1. Execute the mongo database setup script, to do this you have 2 options:
+1. Execute the mongo database setup script, to do this you have 2 options:
    - If you are working on your local machine, you have to run:
      - ```mongo $RIF_LUMINO_EXPLORER_API_PATH/src/main/resources/database/lumino-explorer-api-database-setup.js```
    - Otherwise, you have to specify a host, port and authentication credentials:
      - ```mongo --host <hostname> -u <username> -p <password> $RIF_LUMINO_EXPLORER_API_PATH/src/main/resources/database/lumino-explorer-api-database-setup.js```
 
- 2. After running the mongo script you will see a lot of script messages, at the end it should appear `All is done, Now you can run the lumino-explorer-api`.
+2. After running the mongo script you will see a lot of script messages, at the end it should appear `All is done, Now you can run the lumino-explorer-api`.
 
 ## Reinstalling the Project
 If you have an already installed project version, you need to this steps to update it:
