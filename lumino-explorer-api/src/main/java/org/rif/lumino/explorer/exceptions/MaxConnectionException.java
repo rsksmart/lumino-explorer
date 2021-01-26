@@ -2,17 +2,16 @@ package org.rif.lumino.explorer.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class AlreadyExistException extends ApiException {
-
-  public AlreadyExistException(String message) {
+public class MaxConnectionException extends ApiException {
+  public MaxConnectionException(String message) {
     super(message);
   }
 
-  public AlreadyExistException() {
+  public MaxConnectionException() {
     super();
   }
 
-  public AlreadyExistException(Throwable throwable) {
+  public MaxConnectionException(Throwable throwable) {
     super(throwable);
   }
 

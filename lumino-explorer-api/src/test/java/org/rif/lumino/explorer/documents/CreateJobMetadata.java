@@ -5,15 +5,17 @@ import org.rif.lumino.explorer.models.documents.EventJobMetadata;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.rif.lumino.explorer.repositories.EventJobDataRepository;
 
 import java.math.BigInteger;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
-  public class CreateJobMetadata {
+@DataMongoTest
+public class CreateJobMetadata {
 
   @Autowired EventJobDataRepository eventJobDataRepository;
 

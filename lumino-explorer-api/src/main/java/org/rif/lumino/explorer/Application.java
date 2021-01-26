@@ -7,7 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -23,7 +26,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
       WebConfiguration.class,
     })
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:application.properties")
+@EnableConfigurationProperties
+@EnableAspectJAutoProxy
 public class Application extends SpringBootServletInitializer {
+
 
   @Override
   protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {

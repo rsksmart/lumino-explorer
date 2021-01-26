@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.math.BigInteger;
+
 @ApiModel(description = "All details about the Channel. ")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -50,6 +52,14 @@ public class ChannelDTO {
     @ApiModelProperty(notes = "The symbol that is associated with the channel token")
     @JsonProperty("token_symbol")
     private String tokenSymbol;
+
+    @ApiModelProperty(notes = "Number of decimals decimals associated with token")
+    @JsonProperty("token_decimals")
+    private Integer tokenDecimals;
+
+    @ApiModelProperty(notes = "Total tokens deposit in channel")
+    @JsonProperty("total_deposit")
+    private BigInteger totalDeposit;
 
     public String getFromRnsAddress() {
         return fromRnsAddress;
@@ -130,4 +140,12 @@ public class ChannelDTO {
     public void setToAddress(String toAddress) {
         this.toAddress = toAddress;
     }
+
+    public BigInteger getTotalDeposit() {  return totalDeposit; }
+
+    public void setTotalDeposit(BigInteger totalDeposit) { this.totalDeposit = totalDeposit; }
+
+    public Integer getTokenDecimals() {  return tokenDecimals; }
+
+    public void setTokenDecimals(Integer tokenDecimals) {  this.tokenDecimals = tokenDecimals; }
 }

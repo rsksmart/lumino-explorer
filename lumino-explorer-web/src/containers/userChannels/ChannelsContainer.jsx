@@ -10,8 +10,6 @@ import ChannelList from "../../components/channels/ChannelList";
 
 class ChannelsContainer extends Component{
 
-
-
     getData = ()=>{
         this.props.pollChannels();
     };

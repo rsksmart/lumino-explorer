@@ -13,7 +13,9 @@ export default class ChannelList extends Component {
                 from_rns_address={e.from_rns_address}
                 token_name={e.token_name}
                 state={e.state}
-                token={e.token_address}/>
+                token={e.token_address}
+                total_deposit={e.total_deposit}
+                token_decimals={e.token_decimals}/>
         });
 
         return <ul className="list-unstyled row channel-list">
