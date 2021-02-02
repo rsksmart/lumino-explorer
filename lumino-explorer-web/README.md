@@ -9,7 +9,7 @@
 
 
 1. Lumino Explorer Api Running
-2. Yarn (Latest Version)
+2. Yarn (Latest Version) or NPM
 
 ## Build RIF Lumino Explorer WEB from code
 
@@ -22,7 +22,8 @@
 
 1. Go to `$RIF_LUMINO_EXPLORER_WEB_PATH`
 2. edit the `.env` file and add the explorer api uri, i.e `localhost:8080/api/v1`
-3. run yarn start
+3. run yarn/npm install
+4. run yarn/npm start
 
 4.  After you run yarn command, you will be presented with the following message:
 
