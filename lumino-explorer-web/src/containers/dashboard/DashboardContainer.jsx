@@ -39,7 +39,6 @@ const graphOptions = {
         title: "test",
         color: "#000000",
         width: 2,
-        label: "pepe",
         arrows: {
             to:     {enabled: false, scaleFactor:1, type:'arrow'},
             middle: {enabled: false, scaleFactor:1, type:'arrow'},
@@ -79,10 +78,13 @@ class DashboardContainer extends Component{
             let fullNodeList = this.props.dashboardData.nodes;
             let node = fullNodeList[nodeIndex];
 
+            const rnsAddress = node.rns_address ? <p className="m-0"><span className="text-green d-inline-block d-sm-inline">RNS Address: </span> <span className="d-inline-block d-sm-inline">{node.rns_address}</span></p> : null;
+            const rskAddress = node.node_address ? <p className="m-0"><span className="text-green d-inline-block d-sm-inline">RSK Address: </span> <span className="summary-rsk-address d-inline-block d-sm-inline w-99">{node.node_address}</span></p> : null;
+
             let widget = <div className="fs-14">
                 <p className="text-green m-0 w-600">Node Summary</p>
-                <p className="m-0"><span className="text-green d-inline-block d-sm-inline">RNS Address: </span> <span className="d-inline-block d-sm-inline">{node.rns_address}</span></p>
-                <p className="m-0"><span className="text-green d-inline-block d-sm-inline">RSK Address: </span> <span className="summary-rsk-address d-inline-block d-sm-inline w-99">{node.node_address}</span></p>
+                {rnsAddress}
+                {rskAddress}
             </div>
 
             this.setState({
@@ -169,6 +171,7 @@ class DashboardContainer extends Component{
                             token_name : channel.token_name,
                             token_address : channel.token_address,
                             id: channel.channel_identifier,
+                            label: `Ch: ${channel.channel_identifier}`
                         }
                     }else{
                         return null;
