@@ -9,7 +9,7 @@
 
 
 1. Lumino Explorer Api Running
-2. Yarn (Latest Version)
+2. Yarn (Latest Version) or NPM
 
 ## Build RIF Lumino Explorer WEB from code
 
@@ -21,15 +21,9 @@
 ## Start your RIF Lumino Explorer WEB
 
 1. Go to `$RIF_LUMINO_EXPLORER_WEB_PATH`
-2. Run the following command:
-
-```
-RIF_LUMINO_EXPLORER_WEB_PATH=$YOUR_LUIMNO_API_HOST_AND_PORT yarn start
-```
-
-| FIELD                                   | DESCRIPTION                                                                |
-|-----------------------------------------|----------------------------------------------------------------------------|
-| `$YOUR_LUIMNO_API_HOST_AND_PORT`                          | If this parameter is not present, the value that the application will take to invoke services to the api explorer will be http://localhost:8080                                                  |
+2. edit the `.env` file and add the explorer api uri, i.e `localhost:8080/api/v1`
+3. run yarn/npm install
+4. run yarn/npm start
 
 4.  After you run yarn command, you will be presented with the following message:
 
