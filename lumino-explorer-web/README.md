@@ -6,7 +6,7 @@
 
 1. Lumino Explorer Api Running
 2. NodeJS 14.x.x
-2. Yarn or NPM
+2. Yarn or npm
 
 ## Build RIF Lumino Explorer WEB from code
 
