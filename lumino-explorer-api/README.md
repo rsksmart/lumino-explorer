@@ -22,11 +22,11 @@
    file and set the `spring.profiles.active` to the profile of your preference. For Mainnet leave it as-is.
 4. Now edit the properties file of your selected profile (Ex: if we use the profile called `dev`,
    the file to edit is `$RIF_LUMINO_EXPLORER_API_PATH/src/main/resources/application-dev.properties`).
-5. Set the `lumino.contract.tokenNetworkRegistry` property on that file. 
-   The value with your Lumino Token Network Registry.
+5. Set the property `lumino.contract.tokenNetworkRegistry` with the value of the Lumino Token Network Registry contract address.
    - For TestNet that property has to be like this: `lumino.contract.tokenNetworkRegistry=0x47E5b7d85Da2004781FeD64aeEe414eA9CdC4f17`
    - For MainNet that property has to be like this: `lumino.contract.tokenNetworkRegistry=0x060B81E90894E1F38A625C186CB1F4f9dD86A2B5`
-6. Go to `$RIF_LUMINO_EXPLORER_API_PATH` again and install project dependencies with the following command:
+6. Set the `rsk.blockchain.endpoint` with the endpoint url of the RSK running node. (ex: `rsk.blockchain.endpoint=http://localhost:4444`)
+7. Go to `$RIF_LUMINO_EXPLORER_API_PATH` again and install project dependencies with the following command:
 
 ``` mvn install```
 
@@ -44,7 +44,7 @@
 If you have an already installed project version, you need to this steps to update it:
 
 1. Stop the API .
-2. Git pull from the branch you want to update (ex: git pull origin master).
+2. Git pull from the branch you want to update (ex: `git pull origin master`).
 3. Maven install to update the libraries.
 4. Setup Mongo Database (this is to reset the db).
 5. Start the API again.
@@ -60,9 +60,9 @@ After this, each call should be finished in a reasonable time.
 
 Use this curl to test the `eth_getLogs` response:
 ```
-curl -X POST http://localhost:4444 -H 'Content-Type: application/json' -d '{"jsonrpc":"2.0","method":"eth_getLogs","params":[{"address":"0xde2D53e8d0E673A4b1D9054cE83091777F2fd8Ce","fromBlock":"0x0","toBlock":"latest"}],"id":74}'
+curl -X POST ${RSK_ENDPOINT} -H 'Content-Type: application/json' -d '{"jsonrpc":"2.0","method":"eth_getLogs","params":[{"address":"0xde2D53e8d0E673A4b1D9054cE83091777F2fd8Ce","fromBlock":"0x0","toBlock":"latest"}],"id":74}'
 ```
-
+Where ${RSK_ENDPOINT} variable is the endpoint url of the running RSK node. (ex: `http://localhost:4444`)
 ### Start the application
 1. Go to `$RIF_LUMINO_EXPLORER_API_PATH`
 2. Run the following command:
