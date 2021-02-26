@@ -1,15 +1,12 @@
 # RIF Lumino Explorer WEB
 
-
 ![Lumino Network](Lumino.png?raw=true "RIF Lumino Network")
-
-
 
 ## Pre requisites
 
-
 1. Lumino Explorer Api Running
-2. Yarn (Latest Version) or NPM
+2. NodeJS 14.x.x
+2. Yarn or npm
 
 ## Build RIF Lumino Explorer WEB from code
 
@@ -21,14 +18,12 @@
 ## Start your RIF Lumino Explorer WEB
 
 1. Go to `$RIF_LUMINO_EXPLORER_WEB_PATH`
-2. edit the `.env` file and add the explorer api uri, i.e `localhost:8080/api/v1`
+2. edit the `.env` file and add the explorer api uri, i.e `http://localhost:8080/api/v1`
 3. run yarn/npm install
 4. run yarn/npm start
-
-4.  After you run yarn command, you will be presented with the following message:
+5. After the start command you will be presented with the following message:
 
 ```
-yarn run $YOUR_YARN_VERSION
 $ react-scripts start
 Starting the development server...
 Compiled successfully!
