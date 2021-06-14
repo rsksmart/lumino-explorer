@@ -47,7 +47,7 @@ public class LuminoEventRetriever {
     this.eventName = eventName;
     web3j = Web3j.build(new HttpService(rskBlockchainEndpoint));
     this.getLogsBatchBlockSize = getLogsBatchBlockSize == null ? BigInteger.valueOf(10000) : getLogsBatchBlockSize;
-    this.getLogsRetries = getLogsRetries;
+    this.getLogsRetries = getLogsRetries == null ? 1 : getLogsRetries;
   }
 
   public List<EventData> getLogs(BigInteger from, BigInteger to, String contractAddress)
