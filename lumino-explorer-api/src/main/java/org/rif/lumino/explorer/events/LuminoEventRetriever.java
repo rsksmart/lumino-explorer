@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
 
 public class LuminoEventRetriever {
 
@@ -36,16 +35,19 @@ public class LuminoEventRetriever {
   private String eventName;
   private Web3j web3j;
   private BigInteger getLogsBatchBlockSize;
+  private Integer getLogsRetries;
 
   public LuminoEventRetriever(
       String eventName,
       List<TypeReference<? extends Type>> eventFields,
       String rskBlockchainEndpoint,
-      BigInteger getLogsBatchBlockSize) {
+      BigInteger getLogsBatchBlockSize,
+      Integer getLogsRetries) {
     this.eventFields = eventFields;
     this.eventName = eventName;
     web3j = Web3j.build(new HttpService(rskBlockchainEndpoint));
     this.getLogsBatchBlockSize = getLogsBatchBlockSize == null ? BigInteger.valueOf(10000) : getLogsBatchBlockSize;
+    this.getLogsRetries = getLogsRetries;
   }
 
   public List<EventData> getLogs(BigInteger from, BigInteger to, String contractAddress)
@@ -98,7 +100,7 @@ public class LuminoEventRetriever {
 
   @Async
   public Future<List<EthLog.LogResult>> applyFilterForEvent(
-      String encodedEventSignature, String contractAddress, BigInteger from, BigInteger to) throws IOException, ExecutionException, InterruptedException {
+      String encodedEventSignature, String contractAddress, BigInteger from, BigInteger to) throws Exception {
 
       logger.info(String.format("Trying to get logs for method %s on contract %s from block %s to block %s",
               encodedEventSignature, contractAddress, from == null ?
@@ -119,7 +121,7 @@ public class LuminoEventRetriever {
         }
 
         return new AsyncResult<>(ethLogs);
-      } catch (IOException e) {
+      } catch (Exception e) {
         logger.error(String.format("Error trying to get logs for method %s on contract %s from block %s to block %s",
                 encodedEventSignature, contractAddress, from == null ?
                         DefaultBlockParameterName.EARLIEST : from, to == null ? DefaultBlockParameterName.LATEST : to), e);
@@ -128,23 +130,27 @@ public class LuminoEventRetriever {
   }
 
   @Async
-  public Future<EthLog> getEthGetLogsCall(String encodedEventSignature, String contractAddress, BigInteger currentBatchStart, BigInteger currentBatchEnd) throws IOException {
+  public Future<EthLog> getEthGetLogsCall(String encodedEventSignature, String contractAddress, BigInteger currentBatchStart, BigInteger currentBatchEnd) throws Exception {
       EthFilter ethFilter = new EthFilter(
               DefaultBlockParameter.valueOf(currentBatchStart),
               DefaultBlockParameter.valueOf(currentBatchEnd),
               contractAddress);
       ethFilter.addSingleTopic(encodedEventSignature);
 
-      logger.info(String.format("Trying to get logs for method %s on contract %s from block %s to block %s",
+      logger.debug(String.format("Trying to get logs for method %s on contract %s from block %s to block %s",
               encodedEventSignature, contractAddress, currentBatchStart, currentBatchEnd));
 
-      try {
-        return new AsyncResult<>(this.web3j.ethGetLogs(ethFilter).send());
-      } catch (IOException e) {
-        logger.error(String.format("Error trying to get logs for method %s on contract %s from block %s to block %s",
-                encodedEventSignature, contractAddress, currentBatchStart, currentBatchEnd), e);
-        throw e;
+      for (Integer currentAttempt = 0; currentAttempt < this.getLogsRetries; currentAttempt++) {
+        try {
+          return new AsyncResult<>(this.web3j.ethGetLogs(ethFilter).send());
+        } catch (IOException e) {
+            logger.warn(String.format("Error trying to get logs for method %s on contract %s from block %s to block %s, retrying (%s attempt)",
+                    encodedEventSignature, contractAddress, currentBatchStart, currentBatchEnd, currentAttempt), e);
+        }
       }
+
+      // should fail since the all the attempts fail
+      throw new Exception("All attempts fail.");
   }
 
   private BigInteger getBlockNumberFromBlockParameter(DefaultBlockParameter blockParameter) throws IOException {

@@ -35,8 +35,11 @@ public class ChannelEventsService {
   @Value("${lumino.contracts.newDepositChannelEvent}")
   private String newDespositChannelEventName;
 
-  @Value("${lumino.explorer.api.getlogs.batchsize}")
+  @Value("${lumino.explorer.api.getLogs.batchSize}")
   private BigInteger getLogsBatchBlockSize;
+
+  @Value("${lumino.explorer.api.getLogs.retries}")
+  private Integer getLogsRetries;
 
   LuminoEventRetriever openChannelService;
   LuminoEventRetriever closeChannelService;
@@ -55,7 +58,8 @@ public class ChannelEventsService {
                 new TypeReference<Address>(true) {},
                 new TypeReference<Uint256>() {}),
             rskBlockchainEndpoint,
-                getLogsBatchBlockSize);
+                getLogsBatchBlockSize,
+                getLogsRetries);
 
     closeChannelService =
         new LuminoEventRetriever(
@@ -65,7 +69,8 @@ public class ChannelEventsService {
                 new TypeReference<Address>(true) {},
                 new TypeReference<Uint256>(true) {}),
             rskBlockchainEndpoint,
-                getLogsBatchBlockSize);
+                getLogsBatchBlockSize,
+                getLogsRetries);
 
     settleChannelService =
         new LuminoEventRetriever(
@@ -75,7 +80,8 @@ public class ChannelEventsService {
                 new TypeReference<Uint256>(false) {},
                 new TypeReference<Uint256>(false) {}),
             rskBlockchainEndpoint,
-                getLogsBatchBlockSize);
+                getLogsBatchBlockSize,
+                getLogsRetries);
 
     newDepositChannelService =  new LuminoEventRetriever(
             newDespositChannelEventName,
@@ -84,7 +90,8 @@ public class ChannelEventsService {
                     new TypeReference<Address>(true) {},
                     new TypeReference<Uint256>(false) {}),
             rskBlockchainEndpoint,
-            getLogsBatchBlockSize);
+            getLogsBatchBlockSize,
+            getLogsRetries);
   }
 
   public List<EventData> getNewDepositChannelEvents(

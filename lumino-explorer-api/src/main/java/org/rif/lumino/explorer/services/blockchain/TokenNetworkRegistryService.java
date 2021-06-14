@@ -32,8 +32,11 @@ public class TokenNetworkRegistryService {
   @Value("${lumino.contracts.tokenNetworkCreatedEvent}")
   private String tokenNetworkCreatedEvent;
 
-  @Value("${lumino.explorer.api.getlogs.batchsize}")
+  @Value("${lumino.explorer.api.getLogs.batchSize}")
   private BigInteger getLogsBatchBlockSize;
+
+  @Value("${lumino.explorer.api.getLogs.retries}")
+  private Integer getLogsRetries;
 
   @Autowired RskAccountService rskAccountService;
   private LuminoEventRetriever tokenNetworkCreatedRetriever;
@@ -58,7 +61,8 @@ public class TokenNetworkRegistryService {
             tokenNetworkCreatedEvent,
             Arrays.asList(new TypeReference<Address>(true) {}, new TypeReference<Address>(true) {}),
             rskBlockchainEndpoint,
-            getLogsBatchBlockSize);
+            getLogsBatchBlockSize,
+                getLogsRetries);
   }
 
   public String getTokenNetworkAddress(String tokenAddress) throws Exception {
