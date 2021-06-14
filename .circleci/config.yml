@@ -4,7 +4,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-
+    
     working_directory: ~/tmp
 
     steps:
@@ -15,7 +15,7 @@ jobs:
                     cd lumino-explorer-api
                     mvn install
                     mvn test
-
+      
       - run:
           name: Prepare npm
           command: |
@@ -24,7 +24,7 @@ jobs:
                     sudo apt-get install -y nodejs
                     sudo apt install npm
                     sudo apt install build-essential
-
+      
       - run:
           name: Build & Test Explorer Web
           command: |
