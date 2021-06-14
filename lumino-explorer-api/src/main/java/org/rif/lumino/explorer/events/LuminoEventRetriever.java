@@ -140,7 +140,7 @@ public class LuminoEventRetriever {
       logger.debug(String.format("Trying to get logs for method %s on contract %s from block %s to block %s",
               encodedEventSignature, contractAddress, currentBatchStart, currentBatchEnd));
 
-      for (Integer currentAttempt = 0; currentAttempt < this.getLogsRetries; currentAttempt++) {
+      for (int currentAttempt = 0; currentAttempt < this.getLogsRetries; currentAttempt++) {
         try {
           return new AsyncResult<>(this.web3j.ethGetLogs(ethFilter).send());
         } catch (IOException e) {
