@@ -112,7 +112,7 @@ public class LuminoEventRetriever {
         List<EthLog.LogResult> ethLogs = new ArrayList<>();
 
         BigInteger currentBatchStart = fromBlock;
-        BigInteger currentBatchEnd = this.getLogsBatchBlockSize.compareTo(toBlock) > 0 ? toBlock : this.getCurrentBatchEnd(currentBatchStart, toBlock);
+        BigInteger currentBatchEnd = this.getCurrentBatchEnd(currentBatchStart, toBlock);
 
         while (currentBatchStart.compareTo(currentBatchEnd) < 0) {
           ethLogs.addAll(this.getEthGetLogsCall(encodedEventSignature, contractAddress, currentBatchStart, currentBatchEnd).get().getLogs());
