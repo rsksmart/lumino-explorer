@@ -58,7 +58,7 @@ public class LuminoEventRetriever {
     // Encode event signature
     String encodedEventSignature = EventEncoder.encode(event);
 
-    // Apply filter, retrieve the logs in batches using threads to not saturate the rsk node
+    // Apply filter, retrieve the logs in batches using threads not to saturate the RSK node
     List<EthLog.LogResult> ethLogs = applyFilterForEvent(encodedEventSignature, contractAddress, from, to).get();
 
     List<EventData> events = new ArrayList<>();
