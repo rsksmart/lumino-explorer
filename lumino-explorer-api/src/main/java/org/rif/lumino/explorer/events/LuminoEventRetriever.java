@@ -158,10 +158,10 @@ public class LuminoEventRetriever {
     return ethBlock.getBlock().getNumber();
   }
 
-  private BigInteger getCurrentBatchEnd(BigInteger currentBatchStart, BigInteger to) {
+  private BigInteger getCurrentBatchEnd(BigInteger currentBatchStart, BigInteger finalBlockNumber) {
     BigInteger currentBatchEnd = currentBatchStart.add(this.getLogsBatchBlockSize);
-    if (currentBatchEnd.compareTo(to) > 0) {
-      return to;
+    if (currentBatchEnd.compareTo(finalBlockNumber) > 0) {
+      return finalBlockNumber;
     }
     return currentBatchEnd;
   }
