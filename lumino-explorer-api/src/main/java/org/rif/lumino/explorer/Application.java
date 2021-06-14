@@ -7,36 +7,40 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+import java.util.concurrent.Executor;
 
 @EnableScheduling
 @SpringBootApplication(
-    exclude = {
-      MongoAutoConfiguration.class,
-      MongoDataAutoConfiguration.class,
-    },
-    scanBasePackages = {"org.rif.lumino.explorer.controllers", "org.rif.lumino.explorer.services", "org.rif.lumino.explorer.managers", "org.rif.lumino.explorer.scheduled", "org.rif.lumino.explorer.repositories"},
-    scanBasePackageClasses = {
-      MongoDataBaseConfig.class,
-      WebConfiguration.class,
-    })
+        exclude = {
+                MongoAutoConfiguration.class,
+                MongoDataAutoConfiguration.class,
+        },
+        scanBasePackages = {"org.rif.lumino.explorer.controllers", "org.rif.lumino.explorer.services", "org.rif.lumino.explorer.managers", "org.rif.lumino.explorer.scheduled", "org.rif.lumino.explorer.repositories"},
+        scanBasePackageClasses = {
+                MongoDataBaseConfig.class,
+                WebConfiguration.class,
+        })
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:application.properties")
 @EnableConfigurationProperties
 @EnableAspectJAutoProxy
+@EnableAsync
 public class Application extends SpringBootServletInitializer {
 
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(Application.class);
+    }
 
-  @Override
-  protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-    return application.sources(Application.class);
-  }
-
-  public static void main(String[] args) {
-    SpringApplication.run(Application.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
 }
